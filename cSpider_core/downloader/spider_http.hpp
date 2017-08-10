@@ -24,15 +24,15 @@ namespace Http {
     typedef struct _replyHttpInfo ReplyHttpInfo;
 
     struct _requestHttpInfo {
-        std::string type;                             //  请求类型是 http 还是 https
-        std::string ip;                               //  ip
-        std::string port;                             //  端口
-        std::string request;                          //  请求的数据
+        std::string type;                                                 //  请求类型是 http 还是 https
+        std::string ip;                                                   //  ip
+        std::string port;                                                 //  端口
+        std::string request;                                              //  请求的数据
     };
 
     struct _replyHttpInfo {
-        unsigned int status;                          //  状态信息
-        std::string pageInfo;                         //  html 消息体
+        unsigned int status;                                              //  状态信息
+        std::string pageInfo;                                             //  html 消息体
     };
 
     /*  类开始  */
@@ -47,7 +47,71 @@ namespace Http {
             http_parse_url();
         }
 
-    //protected:
+        // 执行 http get请求并返回结果
+        void http_get_start() {
+
+            char*   pHead = NULL;
+            char*   pEnd = NULL;
+            char    recvBuf[HTTP_GET_RECEIVE_BUFFER_SIZE] = {0};          // 定义数据接收缓冲区
+
+            // 解析 host
+            http_parse_url();
+
+            // 发送 get 请求
+            http_get(recvBuf, HTTP_GET_RECEIVE_BUFFER_SIZE);
+
+            // 解析出返回的 http 信息 
+            http_get_parse(recvBuf);
+
+            // 
+            
+            return;
+        }
+
+
+
+    protected:
+        void http_get_parse(char* recvBuf) {
+
+            char*   pHead = recvBuf;
+            char*   pEnd = recvBuf;
+            char    headBuf[HTTP_GET_RECEIVE_BUFFER_SIZE] = {0};
+
+            pHead = pEnd = recvBuf;
+
+            // 获取返回状态码
+            while(*(++ pEnd) != ' ');
+            pHead = ++ pEnd;
+            while(*(++ pEnd) != ' ');
+            memset(headBuf, 0, HTTP_GET_RECEIVE_BUFFER_SIZE);
+            strncpy(headBuf, pHead, pEnd - pHead);
+            std::cout << "|" << headBuf << "|" << std::endl;
+            replyHttpInfo->status = atoi(headBuf);
+
+
+            while (!(*(++pEnd) == '\n' && *(pEnd - 2) == '\n')) ;
+            ++pEnd;                                                       // 之后是 html 开始
+
+            // 找到<html> </html> 之间的信息
+            pHead = pEnd;
+            while(!(*(++ pEnd) == '<' && *(pEnd + 1) == 'h' && *(pEnd + 3) == 'm' && *(pEnd + 4) == 'l')); 
+            memset(headBuf, 0, HTTP_GET_RECEIVE_BUFFER_SIZE);
+            memcpy(headBuf, pEnd, HTTP_GET_RECEIVE_BUFFER_SIZE);
+
+            replyHttpInfo->pageInfo = headBuf;
+
+            return;
+
+            //printf("%c%c%c%c%c%c\n", *pEnd, *(pEnd + 1), *(pEnd + 2), *(pEnd + 3), *(pEnd + 4), *(pEnd + 5));
+            
+
+            // 赋值
+
+            //strncpy(headBuf, recvBuf, pEnd - pHead);
+
+            //std::cout << headBuf << std::endl;
+            //printf("%c%c%c%c%c\n", *(pEnd + 1), *(pEnd + 2), *(pEnd + 3), *(pEnd + 4), *(pEnd + 5));
+        }
         void http_parse_url() {
 
             if (host.empty()) {
@@ -120,7 +184,7 @@ namespace Http {
             return;
         }
 
-        void http_get() {
+        void http_get(char* recvBuf, size_t len) {
 
             if(requestHttpInfo->ip.empty() || requestHttpInfo->port.empty() || requestHttpInfo->request.empty()) {
 
@@ -192,17 +256,17 @@ namespace Http {
 
             sendBuf += "\r\n";
 
-            write(fd, sendBuf.c_str(), sendBuf.length());
+            ret = write(fd, sendBuf.c_str(), sendBuf.length());
+            /////////////////
 
-            char re[HTTP_GET_RECEIVE_BUFFER_SIZE] = {0};
             sleep(1);
-            ret = read(fd, re, HTTP_GET_RECEIVE_BUFFER_SIZE);
+            ret = read(fd, recvBuf, len);
+            if(0 >= ret) {
+                //////////////////
+                return;
+            }
 
             close(fd);
-
-            // 获取头
-
-            printf("%s\n", re);
 
             return;
         }
