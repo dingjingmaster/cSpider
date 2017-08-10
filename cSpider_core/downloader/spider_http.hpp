@@ -53,6 +53,7 @@ namespace Http {
             char*   pHead = NULL;
             char*   pEnd = NULL;
             char    recvBuf[HTTP_GET_RECEIVE_BUFFER_SIZE] = {0};          // 定义数据接收缓冲区
+            // 智能指针管理缓冲区 尽量减少栈空间shiyong
 
             // 解析 host
             http_parse_url();
@@ -101,17 +102,8 @@ namespace Http {
             replyHttpInfo->pageInfo = headBuf;
 
             return;
-
-            //printf("%c%c%c%c%c%c\n", *pEnd, *(pEnd + 1), *(pEnd + 2), *(pEnd + 3), *(pEnd + 4), *(pEnd + 5));
-            
-
-            // 赋值
-
-            //strncpy(headBuf, recvBuf, pEnd - pHead);
-
-            //std::cout << headBuf << std::endl;
-            //printf("%c%c%c%c%c\n", *(pEnd + 1), *(pEnd + 2), *(pEnd + 3), *(pEnd + 4), *(pEnd + 5));
         }
+
         void http_parse_url() {
 
             if (host.empty()) {
