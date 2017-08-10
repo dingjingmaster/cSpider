@@ -5,16 +5,21 @@
 	> Created Time: 2017年08月10日 星期四 13时09分55秒
  ************************************************************************/
 
-#ifndef _SPIDER_HTTP_HPP
-#define _SPIDER_HTTP_HPP
 #include <iostream>
 #include <cstdio>
 #include <string>
+#include <cstring>
 #include <cstdlib>
+#include <netdb.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <arpa/inet.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
 
 namespace CSpider {
 namespace Http {
-    #define HTTP_GET_RECEIVE_BUFFER_SIZE 40960
+    #define HTTP_GET_RECEIVE_BUFFER_SIZE 409600
     typedef struct _requestHttpInfo RequestHttpInfo;
     typedef struct _replyHttpInfo ReplyHttpInfo;
 
@@ -42,7 +47,7 @@ namespace Http {
             http_parse_url();
         }
 
-    protected:
+    //protected:
         void http_parse_url() {
 
             if (host.empty()) {
@@ -98,8 +103,8 @@ namespace Http {
             }
             
             // 默认值
-            if(requestHttpInfo->http.empty()) {
-                requestHttpInfo->http = "http";
+            if(requestHttpInfo->type.empty()) {
+                requestHttpInfo->type = "http";
             }
 
             if(requestHttpInfo->port.empty()) {
@@ -117,7 +122,7 @@ namespace Http {
 
         void http_get() {
 
-            if(requestHttpInfo->ip.empty() || requestHttpInfo->port.empty() || requestHttpInfo.request.empty()) {
+            if(requestHttpInfo->ip.empty() || requestHttpInfo->port.empty() || requestHttpInfo->request.empty()) {
 
                 //////////
                 return;
@@ -132,7 +137,7 @@ namespace Http {
             struct sockaddr_in    servAddr;
 
             // 获取 host 对应的 ip
-            ip = gethostbyname(requestHttpInfo->ip);
+            ip = gethostbyname(requestHttpInfo->ip.c_str());
             if(NULL == ip) {
 
                 /////////
@@ -151,13 +156,13 @@ namespace Http {
             }
 
             // 连接
-            memset(&servAddr, sizeof(servAddr));
+            memset(&servAddr, 0, sizeof(servAddr));
             servAddr.sin_family = AF_INET;
             servAddr.sin_port = htons(port);
             servAddr.sin_addr = *((struct in_addr*)ip->h_addr);
 
             ret = connect(fd, (struct sockaddr*)(&servAddr), sizeof(struct sockaddr));
-            if(-1 = ret) {
+            if(-1 == ret) {
                 
                 ///////
                 return;
@@ -187,10 +192,15 @@ namespace Http {
 
             sendBuf += "\r\n";
 
-            send(fd, sendBuf.c_str(), sendBuf.length(), 0);
+            write(fd, sendBuf.c_str(), sendBuf.length());
 
             char re[HTTP_GET_RECEIVE_BUFFER_SIZE] = {0};
-            ret = recv(fd, re, HTTP_GET_RECEIVE_BUFFER_SIZE, 0);
+            sleep(1);
+            ret = read(fd, re, HTTP_GET_RECEIVE_BUFFER_SIZE);
+
+            close(fd);
+
+            // 获取头
 
             printf("%s\n", re);
 
@@ -214,10 +224,7 @@ namespace Http {
 
         RequestHttpInfo*  requestHttpInfo;
         ReplyHttpInfo*    replyHttpInfo;
-    }
-
-
+    }; // 类结束
 }
 }
 
-#endif
