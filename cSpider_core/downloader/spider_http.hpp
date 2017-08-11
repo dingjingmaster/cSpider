@@ -281,6 +281,5 @@ namespace Http {
         RequestHttpInfo*  requestHttpInfo;
         ReplyHttpInfo*    replyHttpInfo;
     }; // 类结束
-}
-}
+}}
 

@@ -10,6 +10,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <dirent.h>
 
 
 namespace CSpider {
@@ -19,24 +20,31 @@ namespace IO {
     class SpiderIO {
 
     public:
-        SpiderIO(std::string dir, std::string file, std::string content):dir(dir):file(file):content(content){}
+        SpiderIO(std::string dir, std::string file, std::string content) : dir(dir), file(file), content(content){}
+        ~SpiderIO(){}
 
-    private:
-    std::string       dir;                //  存放文件夹
-    std::string       file;               //  文件名
-    std::string       content;            //  内容
+        void io_write_run() {
+
+            // 开始写
+            if(!dir_is_exist()) {
+
+                dir_create();
+            }
+
+            file_write();
+        }
+
 
     protected:
-        true dir_is_exist(const std::string& dir) {
+        bool dir_is_exist() {
+
+            if (dir.empty()) {
+
+                return false;
+            }
 
             int           ret;
             struct stat   dirInfo;
-
-            if(dir.empty()) {
-
-                ////////
-                return false;
-            }
 
             if(opendir(dir.c_str()) == NULL) {
 
@@ -47,7 +55,7 @@ namespace IO {
             return true;
         }
 
-        void dir_create(const std::string dir) {
+        void dir_create() {
 
             if(dir.empty()) {
 
@@ -60,27 +68,45 @@ namespace IO {
             }
         }
 
-        void file_write(const std::string filePath, std::string content) {
+        void file_write() {
 
-            if(filePath.empty || content.empty) {
-                
-                return; // 错误
+            if(file.empty()) {
+
+                return;
             }
 
             int     fd;
+            int     ret;
+
+            // 切换目录
+            if(-1 == chdir(dir.c_str())) {
+                
+                ////// 不存在
+                return;
+            }
+
             // 打开文件并执行写入操作
-            fd = open(filePath.c_str(), O_CREAT | O_TRUNC | O_WRONLY, 0770);
+            fd = open(file.c_str(), O_CREAT | O_TRUNC | O_WRONLY, 0770);
             if(-1 == fd) {
                 
                 return; //error
             }
-            
-            
+
+            ret = write(fd, content.c_str(), content.length());
+            if(ret < content.length()) {
+                
+                return; // error
+            }
+
+            close(fd);
+
+            return;
         }
 
-
+    private:
+        std::string       dir;                //  存放文件夹
+        std::string       file;               //  文件名
+        std::string       content;            //  内容
     
     }; // 类结束
-}
-}
-
+}}
