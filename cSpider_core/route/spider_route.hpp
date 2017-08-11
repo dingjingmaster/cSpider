@@ -11,18 +11,12 @@
 #include <cstdlib>
 #include <cstring>
 
-
-
-
-
-
-
 namespace CSpider {
 namespace Route {
     class SpiderRoute {
 
     public:
-        SpiderRoute(const char* pHtml, const int htmlLen) : pHtml(pHtml), htmlLen(htmlLen){}
+        SpiderRoute(std::string& html):html(html) {}
         ~SpiderRoute(){}
         
         void route_run() {
@@ -36,6 +30,12 @@ namespace Route {
 
             char buf[1024] = {0};
             std::string url;
+            const char* pHtml = html.c_str();
+            const int   htmlLen = html.length();
+
+            //std::cout << *pHtml << std::endl;
+
+            //std::cout << html << std::endl;
 
             // 同时查找 href base href
             for(int i = 0; i < htmlLen - 14; ++i) {
@@ -43,64 +43,77 @@ namespace Route {
                 // 找到一天链接
                 if(0 == strncmp(pHtml + i, "href=", 5) || 0 == strncmp(pHtml + i, "href =", 6)) {
 
+                    std::cout << "进来了" << std::endl;
+
                     // 找到引号
-                    int       len = 0;
-                    char*     pHead = pHtml + i;
-                    char*     pEnd = NULL;
+                    int             len = 0;
+                    int             j = 0;
+                    int             k = 0;
 
                     // 开始解析 ---
-                    while(*(++ pHead) != '\"' && *(++ pHead) != '\'');
-                    pEnd = ++ pHead;
-                    while(*(++ pEnd) != '\"' && *(++ pEnd) != '\'');
+                    for (j = ++i; *(pHtml + j) != '\"' && *(pHtml + j) != '\''; ++j);
+                    std::cout << *(pHtml + j) ;
+
+                    getchar();
+
+                    break;
+                }
+                    //const char* pHead = pHtml + j;
+                    //for (k = ++j; *(pHtml + j) != '\"' && *(pHtml + k) != '\''; ++k);
+                    //const char* pEnd = pHtml + k;
 
                     // 去头尾
-                    if(*pHead == '\'' || *pHead == '\"')
-                        ++pHead;
-                    if(*pEnd == '\'' || *pEnd == '\"')
-                        --pEnd;
+                    //if(*pHead == '\'' || *pHead == '\"')
+                    //    ++j;
+                    //if(*pEnd == '\'' || *pEnd == '\"')
+                    //    --k;
 
-                    len = pEnd - pHead;
+                    //len = k - j;
 
                     // 保存链接
-                    memset(buf, 0, sizeof(buf));
-                    strncmp(buf, pHead, len);
-                    url = buf;
+                    //memset(buf, 0, sizeof(buf));
+                    //strncmp(buf, pHead, len);
+                    //url = buf;
 
-                    urlList.append(url);
-                    i += len;
+                    //std::cout << buf << std::endl;
+                    //urlList.push_back(url);
+                    //i += len;
+                //}
 
-                }
-
+                /*
                 // 找到一条 base 链接
                 if(0 == strncmp(pHtml + i, "base href=", 10) || 0 == strncmp(pHtml + i, "base href =", 11)) {
 
-                    // 找到引号
-                    int       len = 0;
-                    char*     pHead = pHtml + i;
-                    char*     pEnd = NULL;
+                     // 找到引号
+                    int             len = 0;
+                    int             j = 0;
+                    int             k = 0;
 
                     // 开始解析 ---
-                    while(*(++ pHead) != '\"' && *(++ pHead) != '\'');
-                    pEnd = ++ pHead;
-                    while(*(++ pEnd) != '\"' && *(++ pEnd) != '\'');
+                    for(j = ++i; *(pHtml + j) != '\"' && *(pHtml + j) != '\''; ++j);
+                    const char* pHead = pHtml + j;
+                    for(k = ++j; *(pHtml + j) != '\"' && *(pHtml + k) != '\''; ++k);
+                    const char* pEnd = pHtml + k;
 
                     // 去头尾
                     if(*pHead == '\'' || *pHead == '\"')
-                        ++pHead;
+                        ++j;
                     if(*pEnd == '\'' || *pEnd == '\"')
-                        --pEnd;
+                        --k;
 
-                    len = pEnd - pHead;
+                    len = k - j;
 
                     // 保存链接
                     memset(buf, 0, sizeof(buf));
                     strncmp(buf, pHead, len);
                     url = buf;
 
-                    baseUrlList.append(url);
+                    baseUrlList.push_back(url);
                     i += len;
                 }
-            }
+             */   
+            } 
+
         } // get_url 结束
 
         // url 简单处理
@@ -111,6 +124,8 @@ namespace Route {
 
         void output_url() {
 
+            std::cout << "ok" << std::endl;
+
             for(std::list<std::string>::iterator it = urlList.begin(); it != urlList.end(); ++ it) {
 
                 std::cout << "url: " << *it << std::endl;
@@ -120,8 +135,7 @@ namespace Route {
 
 
     private:
-        const char*             pHtml;
-        const int               htmlLen;
+        std::string             html;
         std::list<std::string>  urlList;
         std::list<std::string>  baseUrlList;
 

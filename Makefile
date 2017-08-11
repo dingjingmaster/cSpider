@@ -10,13 +10,18 @@ head = -I ./cSpider_core/\
 # 测试文件目录
 mkdir = mkdir
 test_file = test
+
 # http_test
 http_test = test/http_test
 http_test_obj = cSpider_core/downloader/test/http_test.o
 
 # io_test
-io_test=test/io_test
+io_test = test/io_test
 io_test_obj = cSpider_core/io/test/io_test.o
+
+# route_test
+route_test = test/route_test
+route_test_obj = cSpider_core/route/test/route_test.o
 
 
 
@@ -38,7 +43,7 @@ $(mkdir):
 # 测试
 .PHONY:test 
 
-test:$(http_test) $(io_test) 
+test:$(http_test) $(io_test) $(route_test) 
 
 
 # 测试文件
@@ -47,6 +52,14 @@ $(http_test):$(http_test_obj)
 
 $(io_test):$(io_test_obj)
 	$(CPP) -o $@ $^
+
+$(route_test):$(route_test_obj)
+	$(CPP) -o $@ $^
+
+
+
+
+
 
 %.o:%.cpp
 	$(CPP) -o $@ -c $< $(head)
@@ -57,7 +70,6 @@ $(io_test):$(io_test_obj)
 
 clean:
 	rm -fr $(test_file)
-	rm -fr $(io_test)
-	rm -fr $(http_test)
 	rm -fr $(io_test_obj)
 	rm -fr $(http_test_obj)
+	rm -fr $(route_test_obj)
