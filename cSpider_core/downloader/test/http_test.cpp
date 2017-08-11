@@ -17,6 +17,8 @@ int main(int argc, char** argv) {
     SpiderHttp http("http://blog.csdn.net/grandPang/article/details/47448395");
     http.http_get_start();
 
+    std::cout << http.http_get_html() << std::endl;
+
 
 
 

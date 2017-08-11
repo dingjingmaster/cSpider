@@ -7,13 +7,8 @@ head = -I ./cSpider_core/\
 
 
 
-
-# 最终生成的库文件
-#cSpider:
-
-
-
 # 测试文件目录
+mkdir = mkdir
 test_file = test
 # http_test
 http_test = test/http_test
@@ -23,10 +18,27 @@ http_test_obj = cSpider_core/downloader/test/http_test.o
 io_test=test/io_test
 io_test_obj = cSpider_core/io/test/io_test.o
 
+
+
+.PHONY : all
+all:$(mkdir)
+	make test
+
+
+# 最终生成的库文件
+cSpider:
+
+
+
+# test file
+$(mkdir):
+	test -d $(test_file) || mkdir $(test_file)
+
+
 # 测试
 .PHONY:test 
 
-test:$(http_test) $(io_test) $(mkdir)
+test:$(http_test) $(io_test) 
 
 
 # 测试文件
@@ -39,9 +51,6 @@ $(io_test):$(io_test_obj)
 %.o:%.cpp
 	$(CPP) -o $@ -c $< $(head)
 
-# test file
-mkdir:
-	mkdir $(test_file)
 
 
 .PHONY:clean

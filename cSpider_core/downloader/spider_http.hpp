@@ -69,6 +69,11 @@ namespace Http {
             return;
         }
 
+        const char* http_get_html() {
+
+            return replyHttpInfo->pageInfo.c_str();
+        }
+
 
 
     protected:
