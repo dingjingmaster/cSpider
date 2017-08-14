@@ -6,7 +6,7 @@
  ************************************************************************/
 
 #include <iostream>
-#include <spider_io.hpp>
+#include <spider_io.h>
 
 using namespace CSpider::IO;
 using namespace std;
@@ -19,13 +19,8 @@ int main(int argc, char** argv) {
 
     SpiderIO io(dir, file, content);
 
-    //std::cout << (io.dir_is_exist(dir) ? "存在" : "不存在") << std::endl;
-    //io.dir_create(dir);
-    //std::cout << (io.dir_is_exist(dir) ? "存在" : "不存在") << std::endl;
-    //io.file_write(file, content);
-
     io.io_write_run();
 
 
-
+    return 0;
 }

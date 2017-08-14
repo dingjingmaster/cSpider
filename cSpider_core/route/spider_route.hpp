@@ -28,15 +28,53 @@ namespace Route {
     protected:
         void get_url() {
 
-            char buf[1024] = {0};
-            std::string url;
-            const char* pHtml = html.c_str();
-            const int   htmlLen = html.length();
+            int                 startNum = 0;
+            int                 endNum = 0;
+            int                 pos = 0;
+            std::string         oo;
+            std::string         buf;
+            std::string         url;
+            std::string         href = "<a href=";
 
-            //std::cout << *pHtml << std::endl;
+            // 开始解析链接
+            while ((endNum = html.find_first_of(href, startNum)) != std::string::npos) {
 
-            //std::cout << html << std::endl;
+                pos = endNum;                                                   // 记录此时的位置
+                startNum = endNum + 4;                                          // 移到内容后边
+                endNum = html.find_first_of("\"", startNum);                    // 找到结束的位置
+                if(endNum != std::string::npos) {
+                    url = html.substr(pos, endNum - pos);
+                    std::cout << url << std::endl;
 
+                    getchar();
+                }
+
+                //std::cin > oo;
+                startNum = endNum + 1;
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
             // 同时查找 href base href
             for(int i = 0; i < htmlLen - 14; ++i) {
 
@@ -79,7 +117,7 @@ namespace Route {
                     //urlList.push_back(url);
                     //i += len;
                 //}
-
+*/
                 /*
                 // 找到一条 base 链接
                 if(0 == strncmp(pHtml + i, "base href=", 10) || 0 == strncmp(pHtml + i, "base href =", 11)) {
@@ -111,8 +149,8 @@ namespace Route {
                     baseUrlList.push_back(url);
                     i += len;
                 }
-             */   
             } 
+             */   
 
         } // get_url 结束
 

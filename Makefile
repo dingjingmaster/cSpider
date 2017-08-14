@@ -1,9 +1,14 @@
 CPP = g++
 
-head = -I ./cSpider_core/\
-			 -I ./cSpider_core/io/\
-			 -I ./cSpider_core/route/\
-			 -I ./cSpider_core/downloader/\
+head = -I cSpider_core/\
+			 -I cSpider_core/io/\
+			 -I cSpider_core/main/\
+			 -I cSpider_core/route/\
+			 -I cSpider_core/downloader/\
+
+src_obj = cSpider_core/io/spider_io.o\
+			
+#cSpider_core/downloader/spider_http.o
 
 
 
@@ -23,15 +28,20 @@ io_test_obj = cSpider_core/io/test/io_test.o
 route_test = test/route_test
 route_test_obj = cSpider_core/route/test/route_test.o
 
+# 最终生成程序主入口
+spider_main = spider_main
+spider_main_obj = cSpider_core/main/spider_main.o
+
 
 
 .PHONY : all
-all:$(mkdir)
-	make test
+
+all:$(spider_main)
 
 
 # 最终生成的库文件
 cSpider:
+	make cSpider_main
 
 
 
@@ -43,17 +53,21 @@ $(mkdir):
 # 测试
 .PHONY:test 
 
-test:$(http_test) $(io_test) $(route_test) 
+test:$(mkdir) $(http_test) $(io_test) $(route_test) 
 
 
 # 测试文件
 $(http_test):$(http_test_obj)
 	$(CPP) -o $@ $^
 
-$(io_test):$(io_test_obj)
+$(io_test):$(io_test_obj) $(src_obj)
 	$(CPP) -o $@ $^
 
 $(route_test):$(route_test_obj)
+	$(CPP) -o $@ $^
+
+# 最终目标
+$(spider_main) : $(spider_main_obj)
 	$(CPP) -o $@ $^
 
 
@@ -69,7 +83,20 @@ $(route_test):$(route_test_obj)
 .PHONY:clean
 
 clean:
+	rm -fr $(src_obj)
 	rm -fr $(test_file)
+	rm -fr $(spider_main)
 	rm -fr $(io_test_obj)
 	rm -fr $(http_test_obj)
 	rm -fr $(route_test_obj)
+	rm -fr $(spider_main_obj)
+
+
+
+
+
+
+
+
+
+
