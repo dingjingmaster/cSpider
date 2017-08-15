@@ -1,10 +1,12 @@
 /*************************************************************************
-	> File Name: spider_http.hpp
+	> File Name: spider_http.h
 	> Author: DingJing
 	> Mail: dingjing_ding@staff.easou.com
 	> Created Time: 2017年08月10日 星期四 13时09分55秒
  ************************************************************************/
 
+#ifndef SPIDER_HTTP_H
+#define SPIDER_HTTP_H
 #include <iostream>
 #include <cstdio>
 #include <string>
@@ -71,3 +73,4 @@ namespace Http {
     }; // 类结束
 }}
 
+#endif

@@ -1,10 +1,12 @@
 /*************************************************************************
-	> File Name: spider_route.hpp
+	> File Name: spider_route.h
 	> Author: DingJing
 	> Mail: dingjing_ding@staff.easou.com
 	> Created Time: 2017年08月11日 星期五 14时31分11秒
  ************************************************************************/
 
+#ifndef _SPIDER_ROUTE_H
+#define _SPIDER_ROUTE_H
 #include <iostream>
 #include <list>
 #include <string>
@@ -150,5 +152,4 @@ namespace Route {
     }; // 类结束
 }
 }
-
-
+#endif
