@@ -3,11 +3,12 @@ CPP = g++
 head = -I cSpider_core/\
 			 -I cSpider_core/io/\
 			 -I cSpider_core/main/\
+			 -I cSpider_core/http/\
+			 -I cSpider_core/error/\
 			 -I cSpider_core/route/\
-			 -I cSpider_core/downloader/\
 
 src_obj = cSpider_core/io/spider_io.o\
-					cSpider_core/downloader/spider_http.o\
+					cSpider_core/http/spider_http.o\
 				  cSpider_core/route/spider_route.o
 
 
@@ -18,7 +19,7 @@ test_file = test
 
 # http_test
 http_test = test/http_test
-http_test_obj = cSpider_core/downloader/test/http_test.o
+http_test_obj = cSpider_core/http/test/http_test.o
 
 # io_test
 io_test = test/io_test
