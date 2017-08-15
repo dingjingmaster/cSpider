@@ -6,7 +6,7 @@
  ************************************************************************/
 
 #include <iostream>
-#include <spider_http.hpp>
+#include <spider_http.h>
 
 using namespace std;
 using namespace CSpider::Http;

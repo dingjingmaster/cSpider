@@ -16,44 +16,12 @@ namespace Route {
     class SpiderRoute {
 
     public:
-        SpiderRoute(std::string& html):html(html) {}
-        ~SpiderRoute(){}
-        
-        void route_run() {
-
-            get_url();
-            output_url();
-        }
+        SpiderRoute(std::string& html);
+        ~SpiderRoute();
+        void route_run();
 
     protected:
-        void get_url() {
-
-            int                 startNum = 0;
-            int                 endNum = 0;
-            int                 pos = 0;
-            std::string         oo;
-            std::string         buf;
-            std::string         url;
-            std::string         href = "<a href=";
-
-            // 开始解析链接
-            while ((endNum = html.find_first_of(href, startNum)) != std::string::npos) {
-
-                pos = endNum;                                                   // 记录此时的位置
-                startNum = endNum + 4;                                          // 移到内容后边
-                endNum = html.find_first_of("\"", startNum);                    // 找到结束的位置
-                if(endNum != std::string::npos) {
-                    url = html.substr(pos, endNum - pos);
-                    std::cout << url << std::endl;
-
-                    getchar();
-                }
-
-                //std::cin > oo;
-                startNum = endNum + 1;
-            }
-
-
+        void get_url();
 
 
 
@@ -151,7 +119,7 @@ namespace Route {
                 }
             } 
              */   
-
+/*
         } // get_url 结束
 
         // url 简单处理
@@ -170,6 +138,7 @@ namespace Route {
             }
             
         }
+        */
 
 
     private:
@@ -181,63 +150,5 @@ namespace Route {
     }; // 类结束
 }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

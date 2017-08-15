@@ -7,8 +7,8 @@ head = -I cSpider_core/\
 			 -I cSpider_core/downloader/\
 
 src_obj = cSpider_core/io/spider_io.o\
-			
-#cSpider_core/downloader/spider_http.o
+					cSpider_core/downloader/spider_http.o\
+				  cSpider_core/route/spider_route.o
 
 
 
@@ -57,17 +57,17 @@ test:$(mkdir) $(http_test) $(io_test) $(route_test)
 
 
 # 测试文件
-$(http_test):$(http_test_obj)
+$(http_test):$(http_test_obj) $(src_obj)
 	$(CPP) -o $@ $^
 
 $(io_test):$(io_test_obj) $(src_obj)
 	$(CPP) -o $@ $^
 
-$(route_test):$(route_test_obj)
+$(route_test):$(route_test_obj) $(src_obj)
 	$(CPP) -o $@ $^
 
 # 最终目标
-$(spider_main) : $(spider_main_obj)
+$(spider_main):$(spider_main_obj) $(src_obj)
 	$(CPP) -o $@ $^
 
 
@@ -83,13 +83,13 @@ $(spider_main) : $(spider_main_obj)
 .PHONY:clean
 
 clean:
-	rm -fr $(src_obj)
 	rm -fr $(test_file)
 	rm -fr $(spider_main)
 	rm -fr $(io_test_obj)
 	rm -fr $(http_test_obj)
 	rm -fr $(route_test_obj)
 	rm -fr $(spider_main_obj)
+	rm -fr $(src_obj)
 
 
 
