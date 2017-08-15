@@ -34,14 +34,15 @@ spider_main_obj = cSpider_core/main/spider_main.o
 
 
 
+# 主文件
+target:$(spider_main)
+
+
+
 .PHONY : all
 
-all:$(spider_main)
-
-
-# 最终生成的库文件
-cSpider:
-	make cSpider_main
+all:$(spider_main) 
+	make test
 
 
 
