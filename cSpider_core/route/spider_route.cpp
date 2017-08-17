@@ -6,10 +6,12 @@
  ************************************************************************/
 
 #include <spider_route.h>
+#include <spider_io.h>
+#include <vector>
 #include <iostream>
-#include <fstream>
 
 using namespace CSpider::Route;
+using namespace CSpider::IO;
 
 SpiderRoute::SpiderRoute() {}
 SpiderRoute::~SpiderRoute(){}
@@ -21,48 +23,46 @@ void SpiderRoute::get_url(const std::string htmlFile, std::vector<std::string>& 
         return;
     }
 
-    int                 startNum = 0;
-    int                 endNum = 0;
-    int                 pos = 0;
-    std::string         oo;
-    std::string         buf;
-    std::string         url;
-    std::string         href = "<a href=";
+    int                         startPos = 0;
+    int                         endPos = 0;
+    std::string                 url;
+    std::string                 href1 = "<a href=";
+    SpiderIO                    io;
+    std::vector<std::string>    v;
 
-    std::ifstream       fin(htmlFile.c_str());
-    std::string         line;
+    io.io_read(htmlFile.c_str(), v);
 
-    if(fin.is_open()){
-        std::cout << "打开" << std::endl;
-    };
 
-    while(getline(fin, line)) {
+    for(std::vector<std::string>::iterator it = v.begin(); it != v.end(); ++it) {
 
-        std::cout << line << std::endl;
+        // 获取一个连接
+        endPos = (*it).find_first_of(href1.c_str(), startPos);
+        if(std::string::npos != endPos) {
 
+            std::cout << *it << std::endl;
+            std::cout << "\n\n" << std::endl;
+        }
+
+        endPos = startPos;
+        startPos = endPos + 1;
     }
-
-
-
-
-
-
-    // 开始解析链接
-    //while ((endNum = html.find_first_of(href, startNum)) != std::string::npos) {
-
-    //    pos = endNum;                                                   // 记录此时的位置
-    //    startNum = endNum + 4;                                          // 移到内容后边
-    //    endNum = html.find_first_of("\"", startNum);                    // 找到结束的位置
-    //    if(endNum != std::string::npos) {
-    //        url = html.substr(pos, endNum - pos);
-    //        std::cout << url << std::endl;
-
-    //        getchar();
-    //    }
-
-        //std::cin > oo;
-    //    startNum = endNum + 1;
-    //}
 }
 
 
+void find_sub(const std::string& line, std::vector<std::string>& subStr) {
+
+    if(line.empty()) {
+
+        return;
+    }
+
+    int     startPos = 0;
+    int     endPos = 0;
+
+    subStr.clear();
+
+
+
+    
+
+}

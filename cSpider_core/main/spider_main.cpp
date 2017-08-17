@@ -22,22 +22,12 @@ int main(int argc, char* argv[]) {
 
     SpiderDownloader  d;
     SpiderRoute       r;
-    SpiderIO          io;
     vector<string>    v;
 
     d.download_page("http://blog.csdn.net/grandPang/article/details/47448395");
 
     // blog.csdn.net/html/grandPang_article_details_47448395
-    //r.get_url("blog.csdn.net/html/grandPang_article_details_47448395", v);
-    io.io_read("blog.csdn.net/html/grandPang_article_details_47448395", v);
-
-    // 文件所有行数
-    for(vector<string>::iterator it = v.begin(); it != v.end(); ++it) {
-
-        // 获取 base url
-
-        cout << *it << endl;
-    }
+    r.get_url("blog.csdn.net/html/grandPang_article_details_47448395", v);
 
 
     cout << "完成" << endl;

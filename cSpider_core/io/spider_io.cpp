@@ -157,20 +157,23 @@ void SpiderIO::io_read(const char* file, std::vector<std::string>& page) {
     }
 
     int           fd;
-    char          buf[4096] = {0};
+    char          buf;
+    std::string   line;
     
     fd = open(file, O_RDONLY);
 
-    while(0 < read(fd, buf, sizeof(buf))) {
+    while(0 < read(fd, &buf, 1)) {
 
-        if(buf[0] == '\n' || strlen(buf) == 0) {
+        if(buf == '\n') {
+
+            page.push_back(line);
+
+            line.clear();
+
             continue;
         }
-
-        // 存入
-        page.push_back(std::string(buf));
-
-        memset(buf, 0, sizeof(buf));
+        
+        line += buf;
     }
 
     close(fd);

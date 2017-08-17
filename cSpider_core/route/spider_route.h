@@ -22,7 +22,9 @@ namespace Route {
         ~SpiderRoute();
 
         void get_url(const std::string htmlFile, std::vector<std::string>& url);
+
     protected:
+        void find_sub(const std::string& line, std::vector<std::string>& subStr);
 
 
 
