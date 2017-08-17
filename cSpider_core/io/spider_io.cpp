@@ -7,6 +7,9 @@
 
 #include <spider_io.h>
 #include <cstring>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <vector>
 
 using namespace CSpider::IO;
 
@@ -96,7 +99,7 @@ void SpiderIO::io_write(const std::string dir, const std::string file, const cha
     if(-1 == chdir(dir.c_str())) {
                 
                 ////// 不存在
-        std::cout << "切换目录错误" << std::endl;
+        std::cout << "切换目录错误: " << dir << std::endl;
         return;
     }
 
@@ -237,9 +240,21 @@ void SpiderIO::dir_create() {
         return;
     }
 
-    if(!mkdir(dir.c_str(), 0770)) {
+    std::string path;
+    std::vector<std::string>  vpath;
 
-        return; // 失败
+    // 对文件夹进行分割
+    string_split(dir, "/", vpath);
+
+    for(std::vector<std::string>::iterator it = vpath.begin(); it != vpath.end(); ++it) {
+
+        if((*it).empty()) {
+            continue;
+        }
+
+        path += *it;
+        mkdir(path.c_str(), 0770);
+        path += "/";
     }
 }
 
@@ -250,9 +265,21 @@ void SpiderIO::dir_create(const std::string& dir) {
         return;
     }
 
-    if(!mkdir(dir.c_str(), 0770)) {
+    std::string path;
+    std::vector<std::string>  vpath;
 
-        return; // 失败
+    // 对文件夹进行分割
+    string_split(dir, "/", vpath);
+
+    for(std::vector<std::string>::iterator it = vpath.begin(); it != vpath.end(); ++it) {
+
+        if((*it).empty()) {
+            continue;
+        }
+
+        path += *it;
+        mkdir(path.c_str(), 0770);
+        path += "/";
     }
 }
 
@@ -264,9 +291,21 @@ void SpiderIO::dir_create(const char* dir) {
         return;
     }
 
-    if(!mkdir(dir, 0770)) {
+    std::string path;
+    std::vector<std::string>  vpath;
 
-        return; // 失败
+    // 对文件夹进行分割
+    string_split(dir, "/", vpath);
+
+    for(std::vector<std::string>::iterator it = vpath.begin(); it != vpath.end(); ++it) {
+
+        if((*it).empty()) {
+            continue;
+        }
+
+        path += *it;
+        mkdir(path.c_str(), 0770);
+        path += "/";
     }
 }
 
@@ -367,6 +406,35 @@ std::string SpiderIO::file_norm(const char* file) {
 
     return path;
 }
+
+void SpiderIO::string_split(const std::string str, const std::string split, std::vector<std::string>& v) {
+    if(str.empty() || split.empty())
+    {
+        return;
+            
+    }
+
+    int     found = 0;
+    int     last_off = 0;
+    v.clear();
+
+    found = str.find_first_of(split);
+    while(found != std::string::npos)
+    {
+        v.push_back(str.substr(last_off, found - last_off));
+        last_off = found + 1;
+        found = str.find_first_of(split, last_off);
+            
+    }
+
+    if(last_off <= str.length())
+    {
+        v.push_back(str.substr(last_off, str.length() - last_off));
+    }
+
+    return;
+}
+
 
 
 

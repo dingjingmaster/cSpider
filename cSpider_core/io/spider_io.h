@@ -7,6 +7,7 @@
 #ifndef _SPIDER_IO_H
 #define _SPIDER_IO_H
 #include <iostream>
+#include <vector>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -40,6 +41,7 @@ namespace IO {
         void file_write(); 
         std::string file_norm(const std::string& file);
         std::string file_norm(const char* file);
+        void string_split(const std::string str, const std::string split, std::vector<std::string>& v);
 
     private:
         std::string       dir;                //  存放文件夹
