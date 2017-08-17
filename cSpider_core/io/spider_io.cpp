@@ -7,6 +7,7 @@
 
 #include <spider_io.h>
 #include <cstring>
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <vector>
@@ -30,6 +31,7 @@ void SpiderIO::io_write_run() {
     return;
 }
 
+
 void SpiderIO::io_write(const std::string dir, const std::string file, const std::string content) {
 
     if(dir.empty() || file.empty()) {
@@ -47,19 +49,11 @@ void SpiderIO::io_write(const std::string dir, const std::string file, const std
         dir_create(dir);
     }
 
-
-    // 切换目录
-    if(-1 == chdir(dir.c_str())) {
-                
-                ////// 不存在
-        return;
-    }
-
     // 归一化文件路径
-    std::string path = file_norm(file);
+    std::string path = file_norm(dir, file);
 
     // 打开文件并执行写入操作
-    fd = open(path.c_str(), O_CREAT | O_TRUNC | O_WRONLY, 0770);
+    fd = open(path.c_str(), O_CREAT | O_TRUNC | O_WRONLY, 0660);
     if(-1 == fd) {
                 
         return; //error
@@ -94,27 +88,16 @@ void SpiderIO::io_write(const std::string dir, const std::string file, const cha
         dir_create(dir);
     }
 
-
-    // 切换目录
-    if(-1 == chdir(dir.c_str())) {
-                
-                ////// 不存在
-        std::cout << "切换目录错误: " << dir << std::endl;
-        return;
-    }
-
     // 归一化文件路径
-    std::string path = file_norm(file);
+    std::string path = file_norm(dir, file);
 
     // 打开文件并执行写入操作
-    fd = open(path.c_str(), O_CREAT | O_TRUNC | O_WRONLY, 0770);
+    fd = open(path.c_str(), O_CREAT | O_TRUNC | O_WRONLY, 0660);
     if(-1 == fd) {
                 
         std::cout << "open error: " << file << std::endl;
         return; //error
     }
-
-    std::cout << file << std::endl;
 
     ret = write(fd, content, strlen(content));
     if(ret < strlen(content)) {
@@ -146,19 +129,11 @@ void SpiderIO::io_write(const char* dir, const char* file, const char* content) 
         dir_create(dir);
     }
 
-
-    // 切换目录
-    if(-1 == chdir(dir)) {
-                
-                ////// 不存在
-        return;
-    }
-
     // 归一化文件路径
-    std::string path = file_norm(file);
+    std::string path = file_norm(dir, file);
 
     // 打开文件并执行写入操作
-    fd = open(path.c_str(), O_CREAT | O_TRUNC | O_WRONLY, 0770);
+    fd = open(path.c_str(), O_CREAT | O_TRUNC | O_WRONLY, 0660);
     if(-1 == fd) {
                 
         return; //error
@@ -168,6 +143,34 @@ void SpiderIO::io_write(const char* dir, const char* file, const char* content) 
     if(ret < strlen(content)) {
                 
         return; // error
+    }
+
+    close(fd);
+}
+
+
+void SpiderIO::io_read(const char* file, std::vector<std::string>& page) {
+
+    if(NULL == file) {
+
+        return;
+    }
+
+    int           fd;
+    char          buf[2048] = {0};
+    
+    fd = open(file, O_RDONLY);
+
+    while(0 < read(fd, buf, sizeof(buf))) {
+
+        if(buf[0] == '\n' || strlen(buf) == 0) {
+            continue;
+        }
+
+        // 存入
+        page.push_back(std::string(buf));
+
+        memset(buf, 0, sizeof(buf));
     }
 
     close(fd);
@@ -320,15 +323,8 @@ void SpiderIO::file_write() {
     int     fd;
     int     ret;
 
-    // 切换目录
-    if(-1 == chdir(dir.c_str())) {
-                
-                ////// 不存在
-        return;
-    }
-
     // 归一化文件路径
-    std::string path = file_norm(file);
+    std::string path = file_norm(dir, file);
 
 
     // 打开文件并执行写入操作
@@ -350,7 +346,7 @@ void SpiderIO::file_write() {
 }
 
 
-std::string SpiderIO::file_norm(const std::string& file) {
+std::string SpiderIO::file_norm(const std::string dir, const std::string& file) {
     
     if(file.empty()) {
 
@@ -375,11 +371,11 @@ std::string SpiderIO::file_norm(const std::string& file) {
     }
 
 
-    return path;
+    return dir + "/" + std::string(path);
 }
 
 
-std::string SpiderIO::file_norm(const char* file) {
+std::string SpiderIO::file_norm(const char* dir, const char* file) {
     
     if(NULL == file) {
 
@@ -389,6 +385,7 @@ std::string SpiderIO::file_norm(const char* file) {
     // 开始转化
     int   ret = 0;
     int   pathLen = strlen(file);
+    char  fpath[2048] = {0};
     char  path[1024] = {0};
 
     if(pathLen >= 1024) {
@@ -403,8 +400,10 @@ std::string SpiderIO::file_norm(const char* file) {
         }
     }
 
+    strncat(fpath, dir, 2048);
+    strncat(fpath, path, 2048);
 
-    return path;
+    return fpath;
 }
 
 void SpiderIO::string_split(const std::string str, const std::string split, std::vector<std::string>& v) {

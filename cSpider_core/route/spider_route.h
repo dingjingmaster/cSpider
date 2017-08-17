@@ -8,7 +8,7 @@
 #ifndef _SPIDER_ROUTE_H
 #define _SPIDER_ROUTE_H
 #include <iostream>
-#include <list>
+#include <vector>
 #include <string>
 #include <cstdlib>
 #include <cstring>
@@ -18,12 +18,11 @@ namespace Route {
     class SpiderRoute {
 
     public:
-        SpiderRoute(std::string& html);
+        SpiderRoute();
         ~SpiderRoute();
-        void route_run();
 
+        void get_url(const std::string htmlFile, std::vector<std::string>& url);
     protected:
-        void get_url();
 
 
 
@@ -145,8 +144,8 @@ namespace Route {
 
     private:
         std::string             html;
-        std::list<std::string>  urlList;
-        std::list<std::string>  baseUrlList;
+        //std::list<std::string>  urlList;
+        //std::list<std::string>  baseUrlList;
 
 
     }; // 类结束

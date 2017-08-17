@@ -29,9 +29,6 @@ void SpiderDownloader::download_page(const std::string url) {
 
     http.http_get_start();
 
-    std::cout << http.http_get_ip() << std::endl;
-    std::cout << http.http_get_request() << std::endl;
-
     // 保存
     CSpider::IO::SpiderIO io;
     io.io_write(get_path(http.http_get_ip()), http.http_get_request(), http.http_get_html());

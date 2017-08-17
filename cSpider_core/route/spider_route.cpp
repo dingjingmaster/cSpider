@@ -6,20 +6,20 @@
  ************************************************************************/
 
 #include <spider_route.h>
+#include <iostream>
+#include <fstream>
+
 using namespace CSpider::Route;
 
-SpiderRoute::SpiderRoute(std::string& html){
-    this->html = html;
-}
+SpiderRoute::SpiderRoute() {}
 SpiderRoute::~SpiderRoute(){}
         
-void SpiderRoute::route_run() {
+void SpiderRoute::get_url(const std::string htmlFile, std::vector<std::string>& vurl) {
 
-    get_url();
-    //output_url();
-}
+    if(htmlFile.empty()) {
 
-void SpiderRoute::get_url() {
+        return;
+    }
 
     int                 startNum = 0;
     int                 endNum = 0;
@@ -29,22 +29,40 @@ void SpiderRoute::get_url() {
     std::string         url;
     std::string         href = "<a href=";
 
+    std::ifstream       fin(htmlFile.c_str());
+    std::string         line;
+
+    if(fin.is_open()){
+        std::cout << "打开" << std::endl;
+    };
+
+    while(getline(fin, line)) {
+
+        std::cout << line << std::endl;
+
+    }
+
+
+
+
+
+
     // 开始解析链接
-    while ((endNum = html.find_first_of(href, startNum)) != std::string::npos) {
+    //while ((endNum = html.find_first_of(href, startNum)) != std::string::npos) {
 
-        pos = endNum;                                                   // 记录此时的位置
-        startNum = endNum + 4;                                          // 移到内容后边
-        endNum = html.find_first_of("\"", startNum);                    // 找到结束的位置
-        if(endNum != std::string::npos) {
-            url = html.substr(pos, endNum - pos);
-            std::cout << url << std::endl;
+    //    pos = endNum;                                                   // 记录此时的位置
+    //    startNum = endNum + 4;                                          // 移到内容后边
+    //    endNum = html.find_first_of("\"", startNum);                    // 找到结束的位置
+    //    if(endNum != std::string::npos) {
+    //        url = html.substr(pos, endNum - pos);
+    //        std::cout << url << std::endl;
 
-            getchar();
-        }
+    //        getchar();
+    //    }
 
         //std::cin > oo;
-        startNum = endNum + 1;
-    }
+    //    startNum = endNum + 1;
+    //}
 }
 
 

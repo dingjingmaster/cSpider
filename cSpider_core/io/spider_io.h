@@ -27,6 +27,8 @@ namespace IO {
         void io_write(const std::string dir, const std::string file, const std::string content);
         void io_write(const std::string dir, const std::string file, const char* content);
         void io_write(const char* dir, const char* file, const char* content);
+        
+        void io_read(const char* file, std::vector<std::string>& page);
 
         void io_write_run(); 
         
@@ -39,8 +41,8 @@ namespace IO {
         void dir_create(const char* dir);
         void dir_create(const std::string& dir);
         void file_write(); 
-        std::string file_norm(const std::string& file);
-        std::string file_norm(const char* file);
+        std::string file_norm(const std::string dir, const std::string& file);
+        std::string file_norm(const char* dir, const char* file);
         void string_split(const std::string str, const std::string split, std::vector<std::string>& v);
 
     private:
