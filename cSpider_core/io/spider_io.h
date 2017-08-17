@@ -13,22 +13,33 @@
 #include <unistd.h>
 #include <dirent.h>
 
-
 namespace CSpider {
 namespace IO {
 
     /*  类开始  */
     class SpiderIO {
     public:
-        SpiderIO(std::string dir, std::string file, std::string content):dir(dir),file(file),content(content){}
+        SpiderIO();
+        SpiderIO(const std::string dir, const std::string file, const std::string content):dir(dir),file(file),content(content){}
         ~SpiderIO(){}
 
+        void io_write(const std::string dir, const std::string file, const std::string content);
+        void io_write(const std::string dir, const std::string file, const char* content);
+        void io_write(const char* dir, const char* file, const char* content);
+
         void io_write_run(); 
+        
 
     protected:
         bool dir_is_exist();
+        bool dir_is_exist(const std::string& dir);
+        bool dir_is_exist(const char* dir);
         void dir_create();
+        void dir_create(const char* dir);
+        void dir_create(const std::string& dir);
         void file_write(); 
+        std::string file_norm(const std::string& file);
+        std::string file_norm(const char* file);
 
     private:
         std::string       dir;                //  存放文件夹

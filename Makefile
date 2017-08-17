@@ -3,13 +3,15 @@ CPP = g++
 head = -I cSpider_core/\
 			 -I cSpider_core/io/\
 			 -I cSpider_core/main/\
-			 -I cSpider_core/http/\
 			 -I cSpider_core/error/\
 			 -I cSpider_core/route/\
+			 -I cSpider_core/download/\
+
 
 src_obj = cSpider_core/io/spider_io.o\
-					cSpider_core/http/spider_http.o\
-				  cSpider_core/route/spider_route.o
+				  cSpider_core/route/spider_route.o\
+				  cSpider_core/download/spider_http.o\
+					cSpider_core/download/spider_download.o\
 
 
 
@@ -19,7 +21,7 @@ test_file = test
 
 # http_test
 http_test = test/http_test
-http_test_obj = cSpider_core/http/test/http_test.o
+http_test_obj = cSpider_core/download/test/http_test.o
 
 # io_test
 io_test = test/io_test
@@ -28,6 +30,10 @@ io_test_obj = cSpider_core/io/test/io_test.o
 # route_test
 route_test = test/route_test
 route_test_obj = cSpider_core/route/test/route_test.o
+
+# download_test
+download_test = test/download_test
+download_test_obj = cSpider_core/download/test/download_test.o
 
 # 最终生成程序主入口
 spider_main = spider_main
@@ -55,11 +61,14 @@ $(mkdir):
 # 测试
 .PHONY:test 
 
-test:$(mkdir) $(http_test) $(io_test) $(route_test) 
+test:$(mkdir) $(http_test) $(io_test) $(route_test) $(download_test)
 
 
 # 测试文件
 $(http_test):$(http_test_obj) $(src_obj)
+	$(CPP) -o $@ $^
+
+$(download_test):$(download_test_obj) $(src_obj)
 	$(CPP) -o $@ $^
 
 $(io_test):$(io_test_obj) $(src_obj)
@@ -67,6 +76,13 @@ $(io_test):$(io_test_obj) $(src_obj)
 
 $(route_test):$(route_test_obj) $(src_obj)
 	$(CPP) -o $@ $^
+
+
+
+
+
+
+
 
 # 最终目标
 $(spider_main):$(spider_main_obj) $(src_obj)
@@ -91,6 +107,7 @@ clean:
 	rm -fr $(http_test_obj)
 	rm -fr $(route_test_obj)
 	rm -fr $(spider_main_obj)
+	rm -fr $(download_test_obj)
 	rm -fr $(src_obj)
 
 

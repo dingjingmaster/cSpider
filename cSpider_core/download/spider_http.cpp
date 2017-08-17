@@ -42,6 +42,20 @@ const char* SpiderHttp::http_get_html() {
     return replyHttpInfo->pageInfo.c_str();
 }
 
+std::string SpiderHttp::http_get_ip() {
+
+    return requestHttpInfo->ip;
+}
+
+std::string SpiderHttp::http_get_request() {
+
+    size_t  len = requestHttpInfo->request.length();
+    std::string req = requestHttpInfo->request.substr(1, len - 1);
+
+    return req;
+}
+
+
 void SpiderHttp::http_get_parse(char* recvBuf) {
 
     char*   pHead = recvBuf;
@@ -56,7 +70,6 @@ void SpiderHttp::http_get_parse(char* recvBuf) {
     while(*(++ pEnd) != ' ');
     memset(headBuf, 0, HTTP_GET_RECEIVE_BUFFER_SIZE);
     strncpy(headBuf, pHead, pEnd - pHead);
-    std::cout << "|" << headBuf << "|" << std::endl;
     this->replyHttpInfo->status = atoi(headBuf);
 
     while (!(*(++pEnd) == '\n' && *(pEnd - 2) == '\n')) ;

@@ -7,9 +7,15 @@
 
 #include <iostream>
 #include <spider_io.h>
-#include <spider_io.h>
+#include <spider_download.h>
+
+using namespace std;
+using namespace CSpider;
+
 
 int main(int argc, char* argv[]) {
+
+
 
     return 0;
 }

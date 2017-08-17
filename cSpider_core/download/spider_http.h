@@ -47,6 +47,8 @@ namespace Http {
         // 执行 http get请求并返回结果
         void http_get_start();
         const char* http_get_html();
+        std::string http_get_ip();
+        std::string http_get_request();
 
 
     protected:
