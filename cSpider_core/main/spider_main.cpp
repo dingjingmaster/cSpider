@@ -34,6 +34,8 @@ int main(int argc, char* argv[]) {
     // 文件所有行数
     for(vector<string>::iterator it = v.begin(); it != v.end(); ++it) {
 
+        // 获取 base url
+
         cout << *it << endl;
     }
 

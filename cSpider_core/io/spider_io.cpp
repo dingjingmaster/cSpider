@@ -157,7 +157,7 @@ void SpiderIO::io_read(const char* file, std::vector<std::string>& page) {
     }
 
     int           fd;
-    char          buf[2048] = {0};
+    char          buf[4096] = {0};
     
     fd = open(file, O_RDONLY);
 
