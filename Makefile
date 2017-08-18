@@ -1,10 +1,21 @@
 CPP = g++
 
+htmlcxx_path = lib/htmlcxx/
+
+htmlcxx = -I $(lib_path)\
+					-I $(lib_path)/html/\
+					-I $(lib_path)/css/
+
+htmlcxx_obj = $(htmlcxx_path)/html/ParserDom.o\
+							$(htmlcxx_path)/html/Node.o\
+							$(htmlcxx_path)/html/ParserSax.o
+
 head = -I cSpider_core/\
 			 -I cSpider_core/io/\
 			 -I cSpider_core/main/\
 			 -I cSpider_core/error/\
 			 -I cSpider_core/route/\
+			 -I cSpider_core/parse/\
 			 -I cSpider_core/download/\
 
 
@@ -12,6 +23,8 @@ src_obj = cSpider_core/io/spider_io.o\
 				  cSpider_core/route/spider_route.o\
 				  cSpider_core/download/spider_http.o\
 					cSpider_core/download/spider_download.o\
+					cSpider_core/parse/spider_parse.o
+
 
 
 
@@ -85,8 +98,8 @@ $(route_test):$(route_test_obj) $(src_obj)
 
 
 # 最终目标
-$(spider_main):$(spider_main_obj) $(src_obj)
-	$(CPP) -o $@ $^
+$(spider_main):$(spider_main_obj) $(src_obj) $(htmlcxx_obj)
+	$(CPP) -o $@ $^ 
 
 
 
@@ -94,7 +107,12 @@ $(spider_main):$(spider_main_obj) $(src_obj)
 
 
 %.o:%.cpp
-	$(CPP) -o $@ -c $< $(head)
+	$(CPP) -o $@ -c $< $(head) 
+
+
+%.o:%.cc
+	$(CPP) -o $@ -c $< $(head) 
+
 
 
 
@@ -109,6 +127,7 @@ clean:
 	rm -fr $(spider_main_obj)
 	rm -fr $(download_test_obj)
 	rm -fr $(src_obj)
+	rm -fr $(htmlcxx_obj)
 
 
 

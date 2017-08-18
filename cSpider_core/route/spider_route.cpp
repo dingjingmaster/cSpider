@@ -90,7 +90,6 @@ void SpiderRoute::get_url(const std::string htmlFile, std::vector<std::string>& 
             }
         }
 
-
         // check up 
         startPos = 0;
         endPos = 0;

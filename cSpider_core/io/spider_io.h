@@ -29,6 +29,7 @@ namespace IO {
         void io_write(const char* dir, const char* file, const char* content);
         
         void io_read(const char* file, std::vector<std::string>& page);
+        void io_read(const char* file, std::string& page);
 
         void io_write_run(); 
         

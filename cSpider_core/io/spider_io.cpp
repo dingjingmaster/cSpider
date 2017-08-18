@@ -180,6 +180,28 @@ void SpiderIO::io_read(const char* file, std::vector<std::string>& page) {
 }
 
 
+void SpiderIO::io_read(const char* file, std::string& page) {
+
+    if(NULL == file) {
+
+        return;
+    }
+
+    int           fd;
+    char          buf;
+    
+    fd = open(file, O_RDONLY);
+
+    while(0 < read(fd, &buf, 1)) {
+
+        page += buf;
+    }
+
+    close(fd);
+}
+
+
+
 bool SpiderIO::dir_is_exist() {
 
     if (dir.empty()) {
