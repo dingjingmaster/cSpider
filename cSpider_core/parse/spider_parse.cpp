@@ -35,6 +35,31 @@ void SpiderParse::parse_html(std::string& page) {
     tree<HTML::Node> dom = parse.parseTree(html);
 
     //cout << dom << endl;
+    tree<HTML::Node>::iterator it = dom.begin();
+    tree<HTML::Node>::iterator end = dom.end();
+
+    /*
+    for(; it != end; ++ it) {
+        if(strcasecmp(it->tagName().c_str(), "A") == 0) {
+            it->parseAttributes();
+            cout << it->attribute("href").second << endl;
+        }
+    }
+    */
+
+    // 输出所有的文本节点
+    it = dom.begin();
+    end = dom.end();
+    for(; it != end; ++it) {
+
+        if(strcasecmp(it->tagName().c_str(), "script")) {
+            continue;
+        }
+
+        if((!it->isTag()) && (!it->isComment())) {
+            cout << it->text();
+        }
+    }
 
 
     //cout << html << endl;
