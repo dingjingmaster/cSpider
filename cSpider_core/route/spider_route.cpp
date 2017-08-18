@@ -26,43 +26,149 @@ void SpiderRoute::get_url(const std::string htmlFile, std::vector<std::string>& 
     int                         startPos = 0;
     int                         endPos = 0;
     std::string                 url;
+    std::string                 baseUrl;
     std::string                 href1 = "<a href=";
+    std::string                 href2 = "<a href =";
+    std::string                 baseUrl1 = "base href=";
+    std::string                 baseUrl2 = "base href =";
+    std::string                 flag1 = "\'";
+    std::string                 flag2 = "\"";
     SpiderIO                    io;
     std::vector<std::string>    v;
 
     io.io_read(htmlFile.c_str(), v);
 
-
     for(std::vector<std::string>::iterator it = v.begin(); it != v.end(); ++it) {
 
-        // 获取一个连接
-        endPos = (*it).find_first_of(href1.c_str(), startPos);
-        if(std::string::npos != endPos) {
+        startPos = 0;
+        endPos = 0;
 
-            std::cout << *it << std::endl;
-            std::cout << "\n\n" << std::endl;
+        // check up base url
+        while((endPos = it->find(baseUrl1, startPos)) != std::string::npos || (endPos = it->find(baseUrl1, startPos)) != std::string::npos) {
+
+            int pos1 = 0;
+            int pos2 = 0;
+
+            //std::cout << *it << std::endl;
+
+            // find first href1
+            if((pos1 = it->find_first_of(flag1, endPos)) != std::string::npos) {
+
+                // find url
+                pos2 = it->find_first_of(flag1, pos1 + 1);
+                pos2 = it->find_first_of(flag2, pos1 + 1);
+                if(pos2 > pos1 && pos1 != std::string::npos && pos2 != std::string::npos) {
+
+                    baseUrl = it->substr(pos1 + 1, pos2 - pos1 - 1);
+
+                    std::cout << baseUrl << std::endl;
+                    std::cout << "\n\n" << std::endl;
+
+                    startPos = pos2;
+                    continue;
+                }
+
+            }
+
+
+            // find first href1
+            if((pos1 = it->find_first_of(flag2, endPos)) != std::string::npos) {
+
+                // find url
+                pos2 = it->find_first_of(flag1, pos1 + 1);
+                pos2 = it->find_first_of(flag2, pos1 + 1);
+                if(pos2 > pos1 && pos1 != std::string::npos && pos2 != std::string::npos) {
+
+                    baseUrl = it->substr(pos1 + 1, pos2 - pos1 - 1);
+
+                    std::cout << baseUrl << std::endl;
+                    //std::cout << "\n\n" << std::endl;
+            
+                    startPos = pos2;
+                    continue;
+                }
+            }
         }
 
-        endPos = startPos;
-        startPos = endPos + 1;
+
+        // check up 
+        startPos = 0;
+        endPos = 0;
+        while((endPos = it->find(href1, startPos)) != std::string::npos || (endPos = it->find(href2, startPos)) != std::string::npos) {
+
+            int pos1 = 0;
+            int pos2 = 0;
+
+            //std::cout << *it << std::endl;
+
+            // find first href1
+            if((pos1 = it->find_first_of(flag1, endPos)) != std::string::npos) {
+
+                // find url
+                pos2 = it->find_first_of(flag1, pos1 + 1);
+                pos2 = it->find_first_of(flag2, pos1 + 1);
+                if(pos2 > pos1 && pos1 != std::string::npos && pos2 != std::string::npos) {
+
+                    url = it->substr(pos1 + 1, pos2 - pos1 - 1);
+
+                    //std::cout << url << std::endl;
+                    //std::cout << "\n\n" << std::endl;
+
+                    startPos = pos2;
+                    continue;
+                }
+
+            }
+
+            // find first href1
+            if((pos1 = it->find_first_of(flag2, endPos)) != std::string::npos) {
+
+                // find url
+                pos2 = it->find_first_of(flag1, pos1 + 1);
+                pos2 = it->find_first_of(flag2, pos1 + 1);
+                if(pos2 > pos1 && pos1 != std::string::npos && pos2 != std::string::npos) {
+
+                    url = it->substr(pos1 + 1, pos2 - pos1 - 1);
+
+                    //std::cout << url << std::endl;
+                    //std::cout << "\n\n" << std::endl;
+            
+                    startPos = pos2;
+                    continue;
+                }
+            }
+        }
+
+
     }
 }
 
 
-void find_sub(const std::string& line, std::vector<std::string>& subStr) {
-
-    if(line.empty()) {
-
-        return;
-    }
-
-    int     startPos = 0;
-    int     endPos = 0;
-
-    subStr.clear();
 
 
 
-    
 
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

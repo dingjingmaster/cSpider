@@ -9,6 +9,7 @@
 #define _SPIDER_ROUTE_H
 #include <iostream>
 #include <vector>
+#include <locale>
 #include <string>
 #include <cstdlib>
 #include <cstring>
