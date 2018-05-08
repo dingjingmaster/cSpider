@@ -1,17 +1,45 @@
 CPP = g++
 
+target="spider"
 
-htmlcxx_path = lib/htmlcxx/
+head = -I core/spider/
 
-htmlcxx = -I $(lib_path)\
+core_spider_src = $(wildcard core/spider/*.cpp)
+core_spider_obj = $(patsubst %.cpp, %.o, $(core_spider_src))
+
+engine_main_src = $(wildcard engine/main/*.cpp)
+engine_main_obj = $(patsubst %.cpp, %.o, $(engine_main_src))
+
+
+$(target):$(engine_main_obj) $(core_spider_obj)
+	$(CPP) -o $@ $^ $(head)
+
+
+all:$(target)
+
+
+%.o:%.cpp
+	$(CPP) -o $@ -c $< $(head) 
+
+
+.PHONY:clean
+
+clean:
+	rm $(target)
+	rm $(core_spider_obj)
+	rm $(engine_main_obj)
+
+#htmlcxx_path = lib/htmlcxx/
+
+#htmlcxx = -I $(lib_path)\
 					-I $(lib_path)/html/\
 					-I $(lib_path)/css/
 
-htmlcxx_obj = $(htmlcxx_path)/html/ParserDom.o\
+#htmlcxx_obj = $(htmlcxx_path)/html/ParserDom.o\
 							$(htmlcxx_path)/html/Node.o\
 							$(htmlcxx_path)/html/ParserSax.o
 
-head = -I cSpider_core/\
+#head = -I cSpider_core/\
 			 -I cSpider_core/io/\
 			 -I cSpider_core/main/\
 			 -I cSpider_core/error/\
@@ -20,7 +48,7 @@ head = -I cSpider_core/\
 			 -I cSpider_core/download/\
 
 
-src_obj = cSpider_core/io/spider_io.o\
+#src_obj = cSpider_core/io/spider_io.o\
 				  cSpider_core/route/spider_route.o\
 				  cSpider_core/download/spider_http.o\
 					cSpider_core/download/spider_download.o\
@@ -30,67 +58,67 @@ src_obj = cSpider_core/io/spider_io.o\
 
 
 # 测试文件目录
-mkdir = mkdir
-test_file = test
+#mkdir = mkdir
+#test_file = test
 
 # http_test
-http_test = test/http_test
-http_test_obj = cSpider_core/download/test/http_test.o
+#http_test = test/http_test
+#http_test_obj = cSpider_core/download/test/http_test.o
 
 # io_test
-io_test = test/io_test
-io_test_obj = cSpider_core/io/test/io_test.o
+#io_test = test/io_test
+#io_test_obj = cSpider_core/io/test/io_test.o
 
 # route_test
-route_test = test/route_test
-route_test_obj = cSpider_core/route/test/route_test.o
+#route_test = test/route_test
+#route_test_obj = cSpider_core/route/test/route_test.o
 
 # download_test
-download_test = test/download_test
-download_test_obj = cSpider_core/download/test/download_test.o
+#download_test = test/download_test
+#download_test_obj = cSpider_core/download/test/download_test.o
 
 # 最终生成程序主入口
-spider_main = spider
+#spider_main = spider
 #spider_main_obj = cSpider_core/main/spider_main.o
-spider_main_obj = engine/spider_main.o
+#spider_main_obj = engine/spider_main.o
 
 
 
 # 主文件
-target:$(spider_main)
+#target:$(spider_main)
 
 
 
-.PHONY : all
+#.PHONY : all
 
-all:$(spider_main) 
-	make test
+#all:$(spider_main) 
+#	make test
 
 
 
 # test file
-$(mkdir):
-	test -d $(test_file) || mkdir $(test_file)
+#$(mkdir):
+#	test -d $(test_file) || mkdir $(test_file)
 
 
 # 测试
-.PHONY:test 
+#.PHONY:test 
 
-test:$(mkdir) $(http_test) $(io_test) $(route_test) $(download_test)
+#test:$(mkdir) $(http_test) $(io_test) $(route_test) $(download_test)
 
 
 # 测试文件
-$(http_test):$(http_test_obj) $(src_obj)
-	$(CPP) -o $@ $^
+#$(http_test):$(http_test_obj) $(src_obj)
+#	$(CPP) -o $@ $^
 
-$(download_test):$(download_test_obj) $(src_obj)
-	$(CPP) -o $@ $^
+#$(download_test):$(download_test_obj) $(src_obj)
+#	$(CPP) -o $@ $^
 
-$(io_test):$(io_test_obj) $(src_obj)
-	$(CPP) -o $@ $^
+#$(io_test):$(io_test_obj) $(src_obj)
+#	$(CPP) -o $@ $^
 
-$(route_test):$(route_test_obj) $(src_obj)
-	$(CPP) -o $@ $^
+#$(route_test):$(route_test_obj) $(src_obj)
+#	$(CPP) -o $@ $^
 
 
 
@@ -100,36 +128,33 @@ $(route_test):$(route_test_obj) $(src_obj)
 
 
 # 最终目标
-$(spider_main):$(spider_main_obj) $(src_obj) $(htmlcxx_obj)
-	$(CPP) -o $@ $^ 
+#$(spider_main):$(spider_main_obj) $(src_obj) $(htmlcxx_obj)
+#	$(CPP) -o $@ $^ 
 
 
 
 
 
 
-%.o:%.cpp
-	$(CPP) -o $@ -c $< $(head) 
 
-
-%.o:%.cc
-	$(CPP) -o $@ -c $< $(head) 
+#%.o:%.cc
+#	$(CPP) -o $@ -c $< $(head) 
 
 
 
 
-.PHONY:clean
+#.PHONY:clean
 
-clean:
-	rm -fr $(test_file)
-	rm -fr $(spider_main)
-	rm -fr $(io_test_obj)
-	rm -fr $(http_test_obj)
-	rm -fr $(route_test_obj)
-	rm -fr $(spider_main_obj)
-	rm -fr $(download_test_obj)
-	rm -fr $(src_obj)
-	rm -fr $(htmlcxx_obj)
+#clean:
+#	rm -fr $(test_file)
+#	rm -fr $(spider_main)
+#	rm -fr $(io_test_obj)
+#	rm -fr $(http_test_obj)
+#	rm -fr $(route_test_obj)
+#	rm -fr $(spider_main_obj)
+#	rm -fr $(download_test_obj)
+#	rm -fr $(src_obj)
+#	rm -fr $(htmlcxx_obj)
 
 
 
