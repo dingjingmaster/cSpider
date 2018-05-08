@@ -17,12 +17,16 @@ class SpiderBase {
 public:
     SpiderBase();
     ~SpiderBase();
+    void setUrl(string& url);
+
 protected:
+    virtual string getHtml();
+    virtual string parseContent();
 
 private:
     string                  url;
-    set<string>             filter;
-    queue<string>           urls;
+    set<string>*            filter;
+    queue<string>*          urls;
 
 
 

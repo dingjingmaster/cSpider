@@ -1,33 +1,47 @@
 CPP = g++
+target = spider
+head = -I core/
 
-target="spider"
+core_src = $(wildcard core/*.cpp)
+core_obj = $(patsubst %.cpp, %.o, $(core_src))
 
-head = -I core/spider/
+engine_src = $(wildcard engine/*.cpp)
+engine_obj = $(patsubst %.cpp, %.o, $(engine_src))
 
-core_spider_src = $(wildcard core/spider/*.cpp)
-core_spider_obj = $(patsubst %.cpp, %.o, $(core_spider_src))
-
-engine_main_src = $(wildcard engine/main/*.cpp)
-engine_main_obj = $(patsubst %.cpp, %.o, $(engine_main_src))
+test_src = $(wildcard tests/*.cpp)
+test_obj = $(patsubst %.cpp, %.o, $(test_src))
+test = $(patsubst %.cpp, %.run, $(test_src))
 
 
-$(target):$(engine_main_obj) $(core_spider_obj)
+$(target):$(engine_obj) $(core_obj)
 	$(CPP) -o $@ $^ $(head)
 
 
-all:$(target)
+all:$(target) $(test)
+
+
+test:$(test)
+
+
+%.run:%.o $(core_obj)
+	$(CPP) -o $@ $< $(core_obj) $(head)
 
 
 %.o:%.cpp
 	$(CPP) -o $@ -c $< $(head) 
 
 
+
+.PHONY:test
+
 .PHONY:clean
 
 clean:
-	rm $(target)
-	rm $(core_spider_obj)
-	rm $(engine_main_obj)
+	rm -f $(test)
+	rm -f $(target)
+	rm -f $(core_obj)
+	rm -f $(test_obj)
+	rm -f $(engine_obj)
 
 #htmlcxx_path = lib/htmlcxx/
 

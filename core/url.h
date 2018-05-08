@@ -1,0 +1,35 @@
+/*************************************************************************
+> FileName: url.h
+> Author  : DingJing
+> Mail    : dingjing@live.cn
+> Created Time: 2018年05月08日 星期二 15时52分05秒
+ ************************************************************************/
+#ifndef _URL_H
+#define _URL_H
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Url {
+public:
+    Url();
+    Url(string& url);
+    ~Url();
+    void setUrl(string& url);
+    string& getType();
+    string& getHost();
+    string& getPort();
+    string& getIp();
+
+protected:
+    virtual void parseUrl();
+
+private:
+    string          port;
+    string          url;
+    string          type;
+    string          host;
+    string          ip;
+};
+#endif
