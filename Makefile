@@ -1,5 +1,6 @@
 CPP = g++
 
+
 htmlcxx_path = lib/htmlcxx/
 
 htmlcxx = -I $(lib_path)\
@@ -49,8 +50,9 @@ download_test = test/download_test
 download_test_obj = cSpider_core/download/test/download_test.o
 
 # 最终生成程序主入口
-spider_main = spider_main
-spider_main_obj = cSpider_core/main/spider_main.o
+spider_main = spider
+#spider_main_obj = cSpider_core/main/spider_main.o
+spider_main_obj = engine/spider_main.o
 
 
 
