@@ -14,8 +14,10 @@ using namespace std;
 class Url {
 public:
     Url();
+    Url(string url);
     Url(string& url);
     ~Url();
+    void setUrl(string url);
     void setUrl(string& url);
     string& getType();
     string& getHost();

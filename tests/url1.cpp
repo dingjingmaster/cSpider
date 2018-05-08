@@ -12,7 +12,7 @@ using namespace std;
 
 int main(void) {
     string      url = "http://www.dingjingmaster.top";
-    Url         u(url);
+    Url         u("http://www.dingjingmaster.top");
     cout << "type:" << u.getType() << endl;
     cout << "host:" << u.getHost() << endl;
     cout << "port:" << u.getPort() << endl;

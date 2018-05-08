@@ -10,11 +10,26 @@
 #include <sys/socket.h>
 
 Url::Url() {
+}
 
+
+Url::Url(string url) {
+    if(url.length() > 0) {
+        this->url = url;
+    }
+    parseUrl();
 }
 
 
 Url::Url(string& url) {
+    if(url.length() > 0) {
+        this->url = url;
+    }
+    parseUrl();
+}
+
+
+void Url::setUrl(string url) {
     if(url.length() > 0) {
         this->url = url;
     }
