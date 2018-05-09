@@ -21,23 +21,7 @@ Url::Url(string url) {
 }
 
 
-Url::Url(string& url) {
-    if(url.length() > 0) {
-        this->url = url;
-    }
-    parseUrl();
-}
-
-
 void Url::setUrl(string url) {
-    if(url.length() > 0) {
-        this->url = url;
-    }
-    parseUrl();
-}
-
-
-void Url::setUrl(string& url) {
     if(url.length() > 0) {
         this->url = url;
     }
@@ -81,6 +65,15 @@ string& Url::getIp() {
 }
 
 
+string& Url::getContent() {
+    if(content.length() <= 0) {
+        ///
+    }
+    return content;
+}
+
+
+
 void Url::parseUrl() {
     int                     startNum = 0;
     int                     endNum = 0;
@@ -96,7 +89,7 @@ void Url::parseUrl() {
         startNum += 2;
     }
 
-    // port
+    // host
     endNum = url.find_first_of(":", startNum);
     if (endNum != string::npos) {
         endNum -= startNum;
@@ -113,7 +106,7 @@ void Url::parseUrl() {
             port = url.substr(startNum, url.length());
             startNum = url.length();
         }
-    } else {
+    } else { 
         endNum = url.find_first_of("/", startNum);
         if(endNum != string::npos) {
             endNum -= startNum;
@@ -124,6 +117,13 @@ void Url::parseUrl() {
             host = url.substr(startNum, url.length());
             startNum = url.length();
         }
+    }
+
+    // content
+    if(startNum >= url.length()) {
+        content = "/";
+    } else {
+        content = "/" + url.substr(startNum, url.length());
     }
 
     tip = gethostbyname(host.c_str());

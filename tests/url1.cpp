@@ -12,11 +12,13 @@ using namespace std;
 
 int main(void) {
     string      url = "http://www.dingjingmaster.top";
-    Url         u("http://www.dingjingmaster.top");
+    Url         u("https://blog.csdn.net/u010256388/article/details/68491509");
+    //Url         u(url);
     cout << "type:" << u.getType() << endl;
     cout << "host:" << u.getHost() << endl;
     cout << "port:" << u.getPort() << endl;
     cout << "ip:" << u.getIp() << endl;
+    cout << "content:" << u.getContent() << endl;
 
     return 0;
 }

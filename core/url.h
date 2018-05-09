@@ -15,23 +15,23 @@ class Url {
 public:
     Url();
     Url(string url);
-    Url(string& url);
     ~Url();
     void setUrl(string url);
-    void setUrl(string& url);
     string& getType();
     string& getHost();
     string& getPort();
     string& getIp();
+    string& getContent();
 
 protected:
     virtual void parseUrl();
 
 private:
-    string          port;
     string          url;
     string          type;
     string          host;
+    string          port;
     string          ip;
+    string          content;
 };
 #endif
