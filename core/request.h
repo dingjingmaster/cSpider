@@ -14,11 +14,51 @@ using namespace std;
 class Request {
 public:
     Request();
+    Request(Url& url);
     ~Request();
+    Request& setHttpVersion(string version);
+    Request& setAccept(string accept);
+    Request& setReferer(string referer);
+    Request& setAcceptLanguage(string language);
+    Request& setUserAgent(string agent);
+    Request& setContentType(string content);
+    Request& setHost(string host);
+    Request& setContentLength(string contentLength);
+    Request& setConnect(string connect);
+    Request& setCache(string cache);
+    Request& setCookies(string cookies);
+    string& getHttpVersion();
+    string& getAccept();
+    string& getReferer();
+    string& getAcceptLanguage();
+    string& getUserAgent();
+    string& getContentType();
+    string& getHost();
+    string& getContentLength();
+    string& getConnect();
+    string& getCache();
+    string& getCookies();
+
+    Request& setUrl(Url& url);
+    string get();
+    string post();
+
 protected:
+    virtual void defaultValue();
 
 private:
-    Url             url;
-
+    Url                         url;
+    string                      httpVersion;
+    string                      accept;
+    string                      referer;
+    string                      acceptLanguage;
+    string                      userAgent;
+    string                      contentType;
+    string                      host;
+    string                      contentLength;
+    string                      connection;
+    string                      cacheControl;
+    string                      cookies;
+    string                      authorization;
 };
 #endif
