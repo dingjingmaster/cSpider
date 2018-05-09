@@ -6,6 +6,7 @@
  ************************************************************************/
 #include "url.h"
 #include <netdb.h>
+#include <cstdlib>
 #include <arpa/inet.h>
 #include <sys/socket.h>
 
@@ -30,6 +31,11 @@ void Url::setUrl(string url) {
 
 
 Url::~Url() {
+}
+
+
+short int Url::getAddrType() {
+    return addrType;
 }
 
 
@@ -71,7 +77,6 @@ string& Url::getContent() {
     }
     return content;
 }
-
 
 
 void Url::parseUrl() {
@@ -128,7 +133,8 @@ void Url::parseUrl() {
 
     tip = gethostbyname(host.c_str());
     if(NULL != tip) {
-        switch(tip->h_addrtype) {
+        addrType = tip->h_addrtype;
+        switch(addrType) {
             case AF_INET:
             case AF_INET6:
                 inet_ntop(tip->h_addrtype, (struct in_addr*)(tip->h_addr_list[0]), tmpStr, sizeof(tmpStr));

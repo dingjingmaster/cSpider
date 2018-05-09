@@ -40,6 +40,7 @@ public:
     string& getCookies();
 
     Request& setUrl(Url& url);
+    Url& getUrl();
     string get();
     string post();
 

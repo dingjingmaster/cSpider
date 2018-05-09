@@ -28,6 +28,11 @@ Request& Request::setUrl(Url& url) {
 }
 
 
+Url& Request::getUrl() {
+    return this->url;
+}
+
+
 string Request::get() {
     string request = "";
     request += "GET " + url.getContent() + " " + httpVersion + "\r\n";
@@ -239,11 +244,12 @@ string& Request::getCookies() {
 
 void Request::defaultValue() {
     httpVersion = "HTTP/1.1";
-    accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8";
+    accept = "*/*"; //,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8";
     authorization = "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==";
     //Accept-Encoding: gzip, deflate
     acceptLanguage = "zh,zh-TW;q=0.9,en-US;q=0.8,en;q=0.7,zh-CN;q=0.6";
-    userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36";
+    userAgent = "Mozilla/5.0 (X11; Ubuntu; Linu…) Gecko/20100101 Firefox/59.0";
+        //Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36";
     cacheControl = "no-cache";
     connection = "keep-alive";
 }

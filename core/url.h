@@ -22,11 +22,13 @@ public:
     string& getPort();
     string& getIp();
     string& getContent();
+    short int getAddrType();
 
 protected:
     virtual void parseUrl();
 
 private:
+    short int       addrType;
     string          url;
     string          type;
     string          host;

@@ -5,7 +5,7 @@
 > Created Time: 2018年05月08日 星期二 09时55分14秒
  ************************************************************************/
 #include "spider_base.h"
-#include "spider_http.h"
+#include "http.h"
 
 SpiderBase::SpiderBase() {
     filter = new set<string>();
