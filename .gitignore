@@ -1,10 +1,9 @@
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------
-
+build-*/
 *~
 *.autosave
 *.a
-*.out
 *.core
 *.moc
 *.o
@@ -24,6 +23,7 @@ tags
 .DS_Store
 .directory
 *.debug
+Makefile*
 *.prl
 *.app
 moc_*.cpp
