@@ -3,7 +3,7 @@ package mgo
 import (
 	"fmt"
 
-	"github.com/henrylee2cn/pholcus/common/pool"
+	"spider/common/pool"
 )
 
 // 传入数据库列表 | 返回数据库及其集合树
