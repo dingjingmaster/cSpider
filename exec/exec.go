@@ -41,7 +41,7 @@ func init() {
 }
 
 func SignalProcess () bool {
-	fp, err := os.OpenFile(config.PidFile, os.O_WRONLY | os.O_CREATE, os.ModePerm)
+	fp, err := os.OpenFile(config.PidFile, os.O_WRONLY | os.O_CREATE | os.O_TRUNC, os.ModePerm)
 	if nil != err {
 		fmt.Printf("open file error: %v\n", err)
 		return true

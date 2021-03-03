@@ -11,8 +11,6 @@ func main () {
 
 	//daemon.Background(true)
 
-	logs.Log.Alert("")
-
 	// 子进程执行的内容
 	exec.DefaultRun("web")
 }
