@@ -64,7 +64,7 @@ var Log = func() Logs {
 	// 全局日志打印级别（亦是日志文件输出级别）
 	ml.BeeLogger.SetLevel(config.LOG_LEVEL)
 	// 是否异步输出日志
-	ml.BeeLogger.Async(config.LOG_ASYNC)
+	ml.BeeLogger.Async(config.LogAsync)
 	// 设置日志显示位置
 	ml.BeeLogger.SetLogger("console", map[string]interface{}{
 		"level": config.LOG_CONSOLE_LEVEL,

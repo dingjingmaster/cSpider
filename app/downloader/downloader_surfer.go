@@ -20,7 +20,7 @@ var (
 	cookieJar, _     = cookiejar.New(nil)
 	SurferDownloader = &Surfer{
 		surf:    surfer.New(cookieJar),
-		phantom: surfer.NewPhantom(config.PHANTOMJS, config.PHANTOMJS_TEMP, cookieJar),
+		phantom: surfer.NewPhantom(config.PHANTOMJS, config.PhantomjsTemp, cookieJar),
 	}
 )
 

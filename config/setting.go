@@ -20,11 +20,11 @@ const (
 	logfeedbacklevel      string = "error"                     // 客户端反馈至服务端的日志级别
 	loglineinfo           bool   = false                       // 日志是否打印行信息
 	logsave               bool   = true                        // 是否保存所有日志到本地文件
-	phantomjs             string = WORK_ROOT + "/phantomjs"    // phantomjs文件路径
-	proxylib              string = WORK_ROOT + "/proxy.lib"    // 代理ip文件路径
-	spiderdir             string = WORK_ROOT + "/spiders"      // 动态规则目录
-	fileoutdir            string = WORK_ROOT + "/file_out"     // 文件（图片、HTML等）结果的输出目录
-	textoutdir            string = WORK_ROOT + "/text_out"     // excel或csv输出方式下，文本结果的输出目录
+	phantomjs             string = WorkRoot + "/phantomjs"     // phantomjs文件路径
+	proxylib              string = WorkRoot + "/proxy.lib"     // 代理ip文件路径
+	spiderdir             string = WorkRoot + "/spiders"       // 动态规则目录
+	fileoutdir            string = WorkRoot + "/file_out"      // 文件（图片、HTML等）结果的输出目录
+	textoutdir            string = WorkRoot + "/text_out"      // excel或csv输出方式下，文本结果的输出目录
 	dbname                string = TAG                         // 数据库名称
 	mgoconnstring         string = "127.0.0.1:27017"           // mongodb连接字符串
 	mgoconncap            int    = 1024                        // mongodb连接池容量
@@ -50,9 +50,9 @@ const (
 )
 
 var setting = func() config.Configer {
-	os.MkdirAll(filepath.Clean(HISTORY_DIR), 0777)
-	os.MkdirAll(filepath.Clean(CACHE_DIR), 0777)
-	os.MkdirAll(filepath.Clean(PHANTOMJS_TEMP), 0777)
+	os.MkdirAll(filepath.Clean(HistoryDir), 0777)
+	os.MkdirAll(filepath.Clean(CacheDir), 0777)
+	os.MkdirAll(filepath.Clean(PhantomjsTemp), 0777)
 
 	iniconf, err := config.NewConfig("ini", CONFIG)
 	if err != nil {

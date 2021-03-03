@@ -3,9 +3,11 @@ package exec
 import (
 	"flag"
 	"fmt"
+	"os"
 	"runtime"
 	"strconv"
 	"strings"
+	"syscall"
 
 	"spider/app"
 	"spider/common/gc"
@@ -38,8 +40,36 @@ func init() {
 	gc.ManualGC()
 }
 
+func SignalProcess () bool {
+	fp, err := os.OpenFile(config.PidFile, os.O_WRONLY | os.O_CREATE, os.ModePerm)
+	if nil != err {
+		fmt.Printf("open file error: %v\n", err)
+		return true
+	}
+	defer fp.Close()
+
+	err = syscall.Flock(int(fp.Fd()), syscall.LOCK_EX | syscall.LOCK_NB)
+	if nil != err {
+		fmt.Printf("lock file error:%v\n", err)
+		return true
+	}
+
+	_, err = fp.WriteString(strconv.Itoa(os.Getpid()) + "\n")
+	if nil != err {
+		fmt.Printf("write pid error, process already exists")
+		return true
+	}
+
+	return false
+}
+
 func DefaultRun(uiDefault string) {
-	fmt.Printf("%v\n\n", config.FULL_NAME)
+	if SignalProcess () {
+		fmt.Printf("%s is running\n", config.FullName)
+		return
+	}
+
+	fmt.Printf("%v\n", config.FullName)
 	flag.String("a *********************************************** common *********************************************** -a", "", "")
 	// 操作界面
 	uiflag = flag.String("_ui", uiDefault, "   <选择操作界面> [web] [gui] [cmd]")
@@ -48,7 +78,7 @@ func DefaultRun(uiDefault string) {
 	flag.String("z", "", "README:   参数设置参考 [xxx] 提示，参数中包含多个值时以 \",\" 间隔。\r\n")
 	flag.Parse()
 	writeFlag()
-	run(*uiflag)
+	run()
 }
 
 func flagCommon() {

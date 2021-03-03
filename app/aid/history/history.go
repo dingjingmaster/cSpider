@@ -42,10 +42,10 @@ type (
 )
 
 const (
-	SUCCESS_SUFFIX = config.HISTORY_TAG + "__y"
-	FAILURE_SUFFIX = config.HISTORY_TAG + "__n"
-	SUCCESS_FILE   = config.HISTORY_DIR + "/" + SUCCESS_SUFFIX
-	FAILURE_FILE   = config.HISTORY_DIR + "/" + FAILURE_SUFFIX
+	SUCCESS_SUFFIX = config.HistoryTag + "__y"
+	FAILURE_SUFFIX = config.HistoryTag + "__n"
+	SUCCESS_FILE   = config.HistoryDir + "/" + SUCCESS_SUFFIX
+	FAILURE_FILE   = config.HistoryDir + "/" + FAILURE_SUFFIX
 )
 
 func New(name string, subName string) Historier {

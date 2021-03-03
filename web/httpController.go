@@ -31,7 +31,7 @@ func web(rw http.ResponseWriter, req *http.Request) {
 	//获取pholcus信息
 	data := map[string]interface{}{
 		"title":   config.NAME,
-		"logo":    config.ICON_PNG,
+		"logo":    config.IconPng,
 		"version": config.VERSION,
 		"author":  config.AUTHOR,
 		"mode": map[string]int{

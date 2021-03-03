@@ -9,25 +9,26 @@ import (
 
 // 软件信息。
 const (
-	VERSION   string = "v0.0.0"                                      // 软件版本号
-	AUTHOR    string = ""                                 				// 软件作者
-	NAME      string = "spider 数据采集"                              // 软件名
-	FULL_NAME string = NAME + "_" + VERSION + " （by " + AUTHOR + "）" // 软件全称
-	TAG       string = "spider"                                     // 软件标识符
-	ICON_PNG  string = ``
+	VERSION  string = "v0.0.0"                                      		// 软件版本号
+	AUTHOR   string = "DingJing"                                       		// 软件作者
+	NAME     string = "spider"                                 				// 软件名
+	FullName string = NAME + "_" + VERSION + " （by " + AUTHOR + "）" 		// 软件全称
+	TAG      string = "spider"                                      		// 软件标识符
+	IconPng  string = ``
+	PidFile	 string = "/tmp/" + NAME + "_" + AUTHOR + "_" + VERSION			// 进程id存放位置
 )
 
 // 默认配置。
 const (
-	WORK_ROOT      string = TAG + "_running"                    // 运行时的目录名称
-	CONFIG         string = WORK_ROOT + "/config.ini"       // 配置文件路径
-	CACHE_DIR      string = WORK_ROOT + "/cache"            // 缓存文件目录
-	LOG            string = WORK_ROOT + "/logs/spiders.log" // 日志文件路径
-	LOG_ASYNC      bool   = true                            // 是否异步输出日志
-	PHANTOMJS_TEMP string = CACHE_DIR                       // Surfer-Phantom下载器：js文件临时目录
-	HISTORY_TAG    string = "history"                       // 历史记录的标识符
-	HISTORY_DIR    string = WORK_ROOT + "/" + HISTORY_TAG   // excel或csv输出方式下，历史记录目录
-	SPIDER_EXT     string = ".spider.html"                  // 动态规则扩展名
+	WorkRoot      string = TAG + "_running"               // 运行时的目录名称
+	CONFIG        string = WorkRoot + "/config.ini"       // 配置文件路径
+	CacheDir      string = WorkRoot + "/cache"            // 缓存文件目录
+	LOG           string = WorkRoot + "/logs/spiders.log" // 日志文件路径
+	LogAsync      bool   = true                           // 是否异步输出日志
+	PhantomjsTemp string = CacheDir                       // Surfer-Phantom下载器：js文件临时目录
+	HistoryTag    string = "history"                      // 历史记录的标识符
+	HistoryDir    string = WorkRoot + "/" + HistoryTag    // excel或csv输出方式下，历史记录目录
+	SpiderExt     string = ".spider.html"                 // 动态规则扩展名
 )
 
 // 来自配置文件的配置项。

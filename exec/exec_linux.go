@@ -9,17 +9,11 @@ import (
 	"spider/web"
 )
 
-func run(which string) {
-	exec.Command("/bin/sh", "-c", "title", config.FULL_NAME).Start()
+func run() {
+	exec.Command("/bin/sh", "-c", "title", config.FullName).Start()
 
-	// 选择运行界面
-	switch which {
-	case "web":
-		fallthrough
-	default:
-		ctrl := make(chan os.Signal, 1)
-		signal.Notify(ctrl, os.Interrupt, os.Kill)
-		go web.Run()
-		<-ctrl
-	}
+	ctrl := make(chan os.Signal, 1)
+	signal.Notify(ctrl, os.Interrupt, os.Kill)
+	go web.Run()
+	<-ctrl
 }
