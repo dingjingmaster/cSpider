@@ -2,6 +2,12 @@ package status
 
 // 运行模式
 const (
+	DAEMON int = iota
+	CONSOLE
+)
+
+// 运行模式
+const (
 	UNSET int = iota - 1
 	OFFLINE
 	SERVER

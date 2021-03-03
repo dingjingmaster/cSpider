@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"os"
 	"runtime"
+	"spider/app"
 	"strconv"
 	"strings"
 	"syscall"
 
-	"spider/app"
 	"spider/common/gc"
 	"spider/config"
 	"spider/runtime/cache"
@@ -17,19 +17,19 @@ import (
 )
 
 var (
-	uiflag             *string
-	modeflag           *int
-	portflag           *int
-	masterflag         *string
-	keyinsflag         *string
-	limitflag          *int64
-	outputflag         *string
-	threadflag         *int
-	pauseflag          *int64
-	proxyflag          *int64
-	dockerflag         *int
-	successInheritflag *bool
-	failureInheritflag *bool
+	typeFlag 		   	*string
+	modeflag           	*int
+	port               	*int
+	master             	*string
+	keyinsflag         	*string
+	limitflag          	*int64
+	outputflag         	*string
+	threadflag         	*int
+	pauseflag          	*int64
+	proxyflag          	*int64
+	dockerflag         	*int
+	successInheritflag 	*bool
+	failureInheritflag 	*bool
 )
 
 func init() {
@@ -68,34 +68,27 @@ func DefaultRun () {
 
 	fmt.Printf("%v\n", config.FullName)
 
-	flag.String("mode", "daemon", "选择运行模式 [console] [daemon]")
+	FlagInit()
 
-	//flag.String("a *********************************************** common *********************************************** -a", "", "")
-	//// 操作界面
-	//uiflag = flag.String("_ui", uiDefault, "   <选择操作界面> [web] [gui] [cmd]")
-	//flagCommon()
-	//web.Flag()
-	//flag.String("z", "", "README:   参数设置参考 [xxx] 提示，参数中包含多个值时以 \",\" 间隔。\r\n")
 	flag.Parse()
 	writeFlag()
 	run()
 }
 
-func flagCommon() {
-	//运行模式
+func FlagInit() {
+	typeFlag = flag.String("runType", "daemon", "选择运行模式：后台运行(daemon)，控制台运行(console)")
 	modeflag = flag.Int(
-		"a_mode",
+		"mode",
 		cache.Task.Mode,
-		"   <运行模式: ["+strconv.Itoa(status.OFFLINE)+"] 单机    ["+strconv.Itoa(status.SERVER)+"] 服务端    ["+strconv.Itoa(status.CLIENT)+"] 客户端>")
+		"   运行模式: ["+strconv.Itoa(status.OFFLINE)+"] 单机    ["+strconv.Itoa(status.SERVER)+"] 服务端    ["+strconv.Itoa(status.CLIENT)+"] 客户端")
 
-	//端口号，非单机模式填写
-	portflag = flag.Int(
-		"a_port",
+	port = flag.Int(
+		"port",
 		cache.Task.Port,
-		"   <端口号: 只填写数字即可，不含冒号，单机模式不填>")
+		"   端口号: 只填写数字即可，不含冒号，单机模式不填")
 
 	//主节点ip，客户端模式填写
-	masterflag = flag.String(
+	master = flag.String(
 		"a_master",
 		cache.Task.Master,
 		"   <服务端IP: 不含端口，客户端模式下使用>")
@@ -159,12 +152,26 @@ func flagCommon() {
 		"a_failure",
 		cache.Task.FailureInherit,
 		"   <继承并保存失败记录> [true] [false]")
+
+
+	//flag.String("mode", "0", "选择运行模式：单机(0)，集群-服务器(1), 集群-客户端(2)")
+	config.ServerHost = flag.String("webHost", "0.0.0.0", "信息浏览页ip")
+	config.ServerPort = flag.Int("webPort", 8888, "信息浏览页port")
 }
 
 func writeFlag() {
 	cache.Task.Mode = *modeflag
-	cache.Task.Port = *portflag
-	cache.Task.Master = *masterflag
+	cache.Task.Port = *port
+	cache.Task.Master = *master
+
+	// 运行类型
+	switch *typeFlag {
+	case "daemon":
+		cache.Task.RunType = status.DAEMON
+	case "console":
+		cache.Task.RunType = status.CONSOLE
+	}
+
 	cache.Task.Keyins = *keyinsflag
 	cache.Task.Limit = *limitflag
 	cache.Task.OutType = *outputflag

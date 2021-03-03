@@ -1,7 +1,6 @@
 package web
 
 import (
-	"flag"
 	"log"
 	"net/http"
 	"os"
@@ -17,26 +16,16 @@ import (
 )
 
 var (
-	ip         *string
-	port       *int
 	addr       string
 	spiderMenu []map[string]string
 )
-
-// 获取外部参数
-func Flag() {
-	flag.String("b ******************************************** only for web ******************************************** -b", "", "")
-	// web服务器IP与端口号
-	ip = flag.String("b_ip", "0.0.0.0", "   <Web Server IP>")
-	port = flag.Int("b_port", 9090, "   <Web Server Port>")
-}
 
 // 执行入口
 func Run() {
 	appInit()
 
 	// web服务器地址
-	addr = *ip + ":" + strconv.Itoa(*port)
+	addr = *config.ServerHost + ":" + strconv.Itoa(*config.ServerPort)
 
 	// 预绑定路由
 	Router()
@@ -47,9 +36,9 @@ func Run() {
 	var cmd *exec.Cmd
 	switch runtime.GOOS {
 	case "windows":
-		cmd = exec.Command("cmd", "/c", "start", "http://localhost:"+strconv.Itoa(*port))
+		cmd = exec.Command("cmd", "/c", "start", "http://localhost:"+strconv.Itoa(*config.ServerPort))
 	case "darwin":
-		cmd = exec.Command("open", "http://localhost:"+strconv.Itoa(*port))
+		cmd = exec.Command("open", "http://localhost:"+strconv.Itoa(*config.ServerPort))
 	}
 	if cmd != nil {
 		go func() {

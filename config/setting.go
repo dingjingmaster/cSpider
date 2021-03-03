@@ -10,6 +10,12 @@ import (
 	"spider/runtime/status"
 )
 
+// 运行配置信息
+var (
+	ServerHost 				*string									// <针对网页浏览>服务端ip
+	ServerPort 				*int 									// <针对网页浏览>服务端port
+)
+
 // 配置文件涉及的默认配置。
 const (
 	crawlcap int = 50 // 蜘蛛池最大容量
