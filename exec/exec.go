@@ -17,8 +17,6 @@ import (
 )
 
 var (
-	typeFlag 		   	*string
-	modeflag           	*int
 	port               	*int
 	master             	*string
 	keyinsflag         	*string
@@ -76,12 +74,6 @@ func DefaultRun () {
 }
 
 func FlagInit() {
-	typeFlag = flag.String("runType", "daemon", "选择运行模式：后台运行(daemon)，控制台运行(console)")
-	modeflag = flag.Int(
-		"mode",
-		cache.Task.Mode,
-		"   运行模式: ["+strconv.Itoa(status.OFFLINE)+"] 单机    ["+strconv.Itoa(status.SERVER)+"] 服务端    ["+strconv.Itoa(status.CLIENT)+"] 客户端")
-
 	port = flag.Int(
 		"port",
 		cache.Task.Port,
@@ -153,19 +145,32 @@ func FlagInit() {
 		cache.Task.FailureInherit,
 		"   <继承并保存失败记录> [true] [false]")
 
-
-	//flag.String("mode", "0", "选择运行模式：单机(0)，集群-服务器(1), 集群-客户端(2)")
-	config.ServerHost = flag.String("webHost", "0.0.0.0", "信息浏览页ip")
+	// 特殊配置
 	config.ServerPort = flag.Int("webPort", 8888, "信息浏览页port")
+	config.ServerHost = flag.String("webHost", "0.0.0.0", "信息浏览页ip")
+
+	config.RunType = flag.String("runType", "daemon", "选择运行模式：后台运行(daemon)，控制台运行(console)")
+	config.RunMode = flag.String("mode", "offline", "运行模式：单机(offline), 服务端(service), 客户端(client)")
 }
 
 func writeFlag() {
-	cache.Task.Mode = *modeflag
+	// 运行模式，集群还是单机
+	switch *config.RunMode {
+	case "standalone":
+		cache.Task.Mode = status.OFFLINE
+	case "service":
+		cache.Task.Mode = status.SERVER
+	case "client":
+		cache.Task.Mode = status.CLIENT
+	default:
+		cache.Task.Mode = status.OFFLINE
+	}
+
 	cache.Task.Port = *port
 	cache.Task.Master = *master
 
 	// 运行类型
-	switch *typeFlag {
+	switch *config.RunType {
 	case "daemon":
 		cache.Task.RunType = status.DAEMON
 	case "console":

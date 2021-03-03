@@ -14,6 +14,9 @@ import (
 var (
 	ServerHost 				*string									// <针对网页浏览>服务端ip
 	ServerPort 				*int 									// <针对网页浏览>服务端port
+	RunType 		   		*string									// 当前进程运行方式：daemon console
+
+	RunMode           		*string									// 运行模式
 )
 
 // 配置文件涉及的默认配置。
