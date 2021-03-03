@@ -12,7 +12,7 @@ const (
 	VERSION  string = "v0.0.0"                                      		// 软件版本号
 	AUTHOR   string = "DingJing"                                       		// 软件作者
 	NAME     string = "spider"                                 				// 软件名
-	FullName string = NAME + "_" + VERSION + " （by " + AUTHOR + "）" 		// 软件全称
+	FullName string = NAME + " " + VERSION + "（by " + AUTHOR + "）" 		// 软件全称
 	TAG      string = "spider"                                      		// 软件标识符
 	IconPng  string = ``
 	PidFile	 string = "/tmp/" + NAME + "_" + AUTHOR + "_" + VERSION			// 进程id存放位置

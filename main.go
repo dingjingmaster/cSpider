@@ -12,5 +12,5 @@ func main () {
 	//daemon.Background(true)
 
 	// 子进程执行的内容
-	exec.DefaultRun("web")
+	exec.DefaultRun ()
 }

@@ -14,7 +14,6 @@ import (
 	"spider/config"
 	"spider/runtime/cache"
 	"spider/runtime/status"
-	"spider/web"
 )
 
 var (
@@ -34,10 +33,8 @@ var (
 )
 
 func init() {
-	// 开启最大核心数运行
-	runtime.GOMAXPROCS(runtime.NumCPU())
-	// 开启手动GC
-	gc.ManualGC()
+	runtime.GOMAXPROCS(runtime.NumCPU()) 				// 开启最大核心数运行
+	gc.ManualGC()										// 开启手动GC
 }
 
 func SignalProcess () bool {
@@ -63,19 +60,22 @@ func SignalProcess () bool {
 	return false
 }
 
-func DefaultRun(uiDefault string) {
+func DefaultRun () {
 	if SignalProcess () {
 		fmt.Printf("%s is running\n", config.FullName)
 		return
 	}
 
 	fmt.Printf("%v\n", config.FullName)
-	flag.String("a *********************************************** common *********************************************** -a", "", "")
-	// 操作界面
-	uiflag = flag.String("_ui", uiDefault, "   <选择操作界面> [web] [gui] [cmd]")
-	flagCommon()
-	web.Flag()
-	flag.String("z", "", "README:   参数设置参考 [xxx] 提示，参数中包含多个值时以 \",\" 间隔。\r\n")
+
+	flag.String("mode", "daemon", "选择运行模式 [console] [daemon]")
+
+	//flag.String("a *********************************************** common *********************************************** -a", "", "")
+	//// 操作界面
+	//uiflag = flag.String("_ui", uiDefault, "   <选择操作界面> [web] [gui] [cmd]")
+	//flagCommon()
+	//web.Flag()
+	//flag.String("z", "", "README:   参数设置参考 [xxx] 提示，参数中包含多个值时以 \",\" 间隔。\r\n")
 	flag.Parse()
 	writeFlag()
 	run()
