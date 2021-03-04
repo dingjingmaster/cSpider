@@ -37,9 +37,9 @@ func init() {
 func IndexHandle (rw http.ResponseWriter, req *http.Request) {
 	sess, _ := globalSessions.SessionStart(rw, req)
 	defer sess.SessionRelease(rw)
-	index, _ := views_index_html()
-	t, err := template.New("index").Parse(string(index)) //解析模板文件
-	//t, err := template.ParseFiles("web/views/index.html") //解析模板文件
+	//index, _ := views_index_html()
+	//t, err := template.New("index").Parse(string(index)) 	//解析模板文件
+	t, err := template.ParseFiles("web/views/index.html") 	//解析模板文件
 	if err != nil {
 		logs.Log.Error("%v", err)
 	}
@@ -56,7 +56,7 @@ func LoginHandle (rw http.ResponseWriter, req *http.Request) {
 	var muser UserReqInfo
 	err := json.Unmarshal(body, &muser)
 	if nil != err {
-		logs.Log.Warning("user:%s login error", muser.name)
+		logs.Log.Warning("user:%s login error:%v", muser.name, err)
 		return
 	}
 
@@ -68,7 +68,15 @@ func LoginHandle (rw http.ResponseWriter, req *http.Request) {
 }
 
 func SpiderHandle (rw http.ResponseWriter, req *http.Request) {
-	body, _ := ioutil.ReadAll(req.Body)
-	logs.Log.Informational (string(body))
+	t, err := template.ParseFiles("web/views/spider.html") 	//解析模板文件
+	if err != nil {
+		logs.Log.Error("%v", err)
+	}
+
+	data := map[string]interface{}{
+		"title":   config.FullName,
+		"logo":    config.IconPng,
+	}
+	t.Execute(rw, data) //执行模板的merger操作
 }
 
