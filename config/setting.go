@@ -14,7 +14,6 @@ import (
 var (
 	ServerHost 				*string									// <针对网页浏览>服务端ip
 	ServerPort 				*int 									// <针对网页浏览>服务端port
-	RunType 		   		*string									// 当前进程运行方式：daemon console
 
 	RunMode           		*string									// 运行模式
 )
@@ -25,8 +24,8 @@ const (
 	// datachancap             int    = 2 << 14                     // 收集器容量(默认65536)
 	logcap                int64  = 10000                       // 日志缓存的容量
 	loglevel              string = "debug"                     // 全局日志打印级别（亦是日志文件输出级别）
-	logconsolelevel       string = "info"                      // 日志在控制台的显示级别
-	logfeedbacklevel      string = "error"                     // 客户端反馈至服务端的日志级别
+	logconsolelevel       string = "debug"                     // 日志在控制台的显示级别
+	logfeedbacklevel      string = "debug"                     // 客户端反馈至服务端的日志级别
 	loglineinfo           bool   = false                       // 日志是否打印行信息
 	logsave               bool   = true                        // 是否保存所有日志到本地文件
 	phantomjs             string = WorkRoot + "/phantomjs"     // phantomjs文件路径

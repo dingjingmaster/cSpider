@@ -14,7 +14,16 @@ import (
 var globalSessions *session.Manager
 
 func init() {
-	globalSessions, _ = session.NewManager("memory", `{"cookieName":"pholcusSession", "enableSetCookie,omitempty": true, "secure": false, "sessionIDHashFunc": "sha1", "sessionIDHashKey": "", "cookieLifeTime": 157680000, "providerConfig": ""}`)
+	globalSessions, _ = session.NewManager("memory",
+		`{
+					"cookieName":"spiderSession",
+					"enableSetCookie,omitempty": true,
+					"secure": false,
+					"sessionIDHashFunc": "sha1",
+					"sessionIDHashKey": "",
+					"cookieLifeTime": 157680000,
+					"providerConfig": ""
+				}`)
 	// go globalSessions.GC()
 }
 
@@ -22,13 +31,13 @@ func init() {
 func web(rw http.ResponseWriter, req *http.Request) {
 	sess, _ := globalSessions.SessionStart(rw, req)
 	defer sess.SessionRelease(rw)
-	index, _ := views_index_html()// viewsIndexHtmlBytes()
+	index, _ := views_index_html()
 	t, err := template.New("index").Parse(string(index)) //解析模板文件
 	// t, err := template.ParseFiles("web/views/index.html") //解析模板文件
 	if err != nil {
 		logs.Log.Error("%v", err)
 	}
-	//获取pholcus信息
+
 	data := map[string]interface{}{
 		"title":   config.NAME,
 		"logo":    config.IconPng,

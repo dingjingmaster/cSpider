@@ -63,30 +63,10 @@ type (
 	}
 )
 
-/*
- * 任务运行时公共配置
-type AppConf struct {
-	Mode           int    // 节点角色
-	Port           int    // 主节点端口
-	Master         string // 服务器(主节点)地址，不含端口
-	ThreadNum      int    // 全局最大并发量
-	Pausetime      int64  // 暂停时长参考/ms(随机: Pausetime/2 ~ Pausetime*2)
-	OutType        string // 输出方式
-	DockerCap      int    // 分段转储容器容量
-	DockerQueueCap int    // 分段输出池容量，不小于2
-	SuccessInherit bool   // 继承历史成功记录
-	FailureInherit bool   // 继承历史失败记录
-	Limit          int64  // 采集上限，0为不限，若在规则中设置初始值为LIMIT则为自定义限制，否则默认限制请求数
-	ProxyMinute    int64  // 代理IP更换的间隔分钟数
-	// 选填项
-	Keyins string // 自定义输入，后期切分为多个任务的Keyin自定义配置
-}
-*/
-
 // 全局唯一的核心接口实例
-var LogicApp = New()
+var LogicApp = New ()
 
-func New() App {
+func New () App {
 	return newLogic()
 }
 
@@ -163,10 +143,6 @@ func (self *Logic) Init( w ...io.Writer) App {
 		self.SetLog(w[0])
 	}
 	self.LogGoOn()
-
-	if status.UNSET == self.AppConf.Mode {
-		self.AppConf.Mode = status.OFFLINE
-	}
 
 	//self.AppConf.Mode, self.AppConf.Port, self.AppConf.Master = mode, port, master
 	self.Teleport = teleport.New()
@@ -527,10 +503,10 @@ func (self *Logic) exec() {
 	// 设置爬虫队列
 	crawlerCap := self.CrawlerPool.Reset(count)
 
-	logs.Log.Informational(" *     执行任务总数(任务数[*自定义配置数])为 %v 个\n", count)
-	logs.Log.Informational(" *     采集引擎池容量为 %v\n", crawlerCap)
-	logs.Log.Informational(" *     并发协程最多 %v 个\n", self.AppConf.ThreadNum)
-	logs.Log.Informational(" *     默认随机停顿 %v~%v 毫秒\n", self.AppConf.Pausetime/2, self.AppConf.Pausetime*2)
+	logs.Log.Informational(" *     执行任务总数(任务数[*自定义配置数])为 %v 个", count)
+	logs.Log.Informational(" *     采集引擎池容量为 %v", crawlerCap)
+	logs.Log.Informational(" *     并发协程最多 %v 个", self.AppConf.ThreadNum)
+	logs.Log.Informational(" *     默认随机停顿 %v~%v 毫秒", self.AppConf.Pausetime/2, self.AppConf.Pausetime*2)
 	logs.Log.App(" *                                                                                                 —— 开始抓取，请耐心等候 ——")
 	logs.Log.Informational(` *********************************************************************************************************************************** `)
 
@@ -576,19 +552,19 @@ func (self *Logic) goRun(count int) {
 	for ii := 0; ii < i; ii++ {
 		s := <-cache.ReportChan
 		if (s.DataNum == 0) && (s.FileNum == 0) {
-			logs.Log.App(" *     [任务小计：%s | KEYIN：%s]   无采集结果，用时 %v！\n", s.SpiderName, s.Keyin, s.Time)
+			logs.Log.App(" *     [任务小计：%s | KEYIN：%s]   无采集结果，用时 %v！", s.SpiderName, s.Keyin, s.Time)
 			continue
 		}
 		logs.Log.Informational(" * ")
 		switch {
 		case s.DataNum > 0 && s.FileNum == 0:
-			logs.Log.App(" *     [任务小计：%s | KEYIN：%s]   共采集数据 %v 条，用时 %v！\n",
+			logs.Log.App(" *     [任务小计：%s | KEYIN：%s]   共采集数据 %v 条，用时 %v！",
 				s.SpiderName, s.Keyin, s.DataNum, s.Time)
 		case s.DataNum == 0 && s.FileNum > 0:
-			logs.Log.App(" *     [任务小计：%s | KEYIN：%s]   共下载文件 %v 个，用时 %v！\n",
+			logs.Log.App(" *     [任务小计：%s | KEYIN：%s]   共下载文件 %v 个，用时 %v！",
 				s.SpiderName, s.Keyin, s.FileNum, s.Time)
 		default:
-			logs.Log.App(" *     [任务小计：%s | KEYIN：%s]   共采集数据 %v 条 + 下载文件 %v 个，用时 %v！\n",
+			logs.Log.App(" *     [任务小计：%s | KEYIN：%s]   共采集数据 %v 条 + 下载文件 %v 个，用时 %v！",
 				s.SpiderName, s.Keyin, s.DataNum, s.FileNum, s.Time)
 		}
 
