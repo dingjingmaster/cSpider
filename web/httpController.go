@@ -3,6 +3,7 @@ package web
 import (
 	"io/ioutil"
 	"net/http"
+	"spider/runtime/user"
 	"text/template"
 
 	"spider/app"
@@ -66,11 +67,8 @@ func IndexHandle (rw http.ResponseWriter, req *http.Request) {
 func LoginHandle (rw http.ResponseWriter, req *http.Request) {
 	body, _ := ioutil.ReadAll(req.Body)
 	logs.Log.Informational (string(body))
-
-	//user.AllUsers["a"] = &user.UserInfo {
-	//	LoginTime:   0,
-	//	LoginHandle: "",
-	//}
+	
+	user.GAllUsers.NewUser("ok")
 	rw.Write([]byte("ok"))
 }
 

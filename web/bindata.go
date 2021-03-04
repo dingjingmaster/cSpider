@@ -1,4 +1,4 @@
-package main
+package web
 
 import (
 	"github.com/elazarl/go-bindata-assetfs"
@@ -6,6 +6,7 @@ import (
 	"compress/gzip"
 	"fmt"
 	"io"
+	"os"
 	"strings"
 )
 

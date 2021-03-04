@@ -19,7 +19,7 @@ func Run () {
 	// 启动网页显示服务
 
 	// 启动爬虫任务
-	RunSpider()
+	//RunSpider()
 
 	// 启动所有 spider
 	//for true {
