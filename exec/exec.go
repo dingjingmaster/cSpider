@@ -1,10 +1,13 @@
 package exec
 
 import (
+	"os"
+	"os/signal"
 	"runtime"
 	"spider/app"
 	"spider/app/spider"
 	"spider/common/gc"
+	"spider/web"
 )
 
 func init() {
@@ -20,13 +23,14 @@ func Run () {
 
 	// 启动所有 spider
 	//for true {
+	//	;
 	//}
 
 	// 开始运行
-	//ctrl := make(chan os.Signal, 1)
-	//signal.Notify(ctrl, os.Interrupt, os.Kill)
-	//go web.Run()
-	//<-ctrl
+	ctrl := make(chan os.Signal, 1)
+	signal.Notify(ctrl, os.Interrupt, os.Kill)
+	go web.Run()
+	<-ctrl
 }
 
 // FIXME:// 此处需要根据命令行进行配置

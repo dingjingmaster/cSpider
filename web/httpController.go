@@ -1,6 +1,7 @@
 package web
 
 import (
+	"io/ioutil"
 	"net/http"
 	"text/template"
 
@@ -28,18 +29,18 @@ func init() {
 }
 
 // 处理web页面请求
-func web(rw http.ResponseWriter, req *http.Request) {
+func IndexHandle (rw http.ResponseWriter, req *http.Request) {
 	sess, _ := globalSessions.SessionStart(rw, req)
 	defer sess.SessionRelease(rw)
-	index, _ := views_index_html()
-	t, err := template.New("index").Parse(string(index)) //解析模板文件
-	// t, err := template.ParseFiles("web/views/index.html") //解析模板文件
+	//index, _ := views_index_html()
+	//t, err := template.New("index").Parse(string(index)) //解析模板文件
+	t, err := template.ParseFiles("web/views/index.html") //解析模板文件
 	if err != nil {
 		logs.Log.Error("%v", err)
 	}
 
 	data := map[string]interface{}{
-		"title":   config.NAME,
+		"title":   config.FullName,
 		"logo":    config.IconPng,
 		"version": config.VERSION,
 		"author":  config.AUTHOR,
@@ -60,4 +61,20 @@ func web(rw http.ResponseWriter, req *http.Request) {
 		"ip":   app.LogicApp.GetAppConf("master").(string),
 	}
 	t.Execute(rw, data) //执行模板的merger操作
+}
+
+func LoginHandle (rw http.ResponseWriter, req *http.Request) {
+	body, _ := ioutil.ReadAll(req.Body)
+	logs.Log.Informational (string(body))
+
+	//user.AllUsers["a"] = &user.UserInfo {
+	//	LoginTime:   0,
+	//	LoginHandle: "",
+	//}
+	rw.Write([]byte("ok"))
+}
+
+func SpiderHandle (rw http.ResponseWriter, req *http.Request) {
+	body, _ := ioutil.ReadAll(req.Body)
+	logs.Log.Informational (string(body))
 }
