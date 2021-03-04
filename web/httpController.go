@@ -1,17 +1,21 @@
 package web
 
 import (
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"spider/runtime/user"
 	"text/template"
 
-	"spider/app"
 	"spider/common/session"
 	"spider/config"
 	"spider/logs"
-	"spider/runtime/status"
 )
+
+type UserReqInfo struct {
+	name 			string 		`name`
+	password		string		`password`
+}
 
 var globalSessions *session.Manager
 
@@ -33,9 +37,9 @@ func init() {
 func IndexHandle (rw http.ResponseWriter, req *http.Request) {
 	sess, _ := globalSessions.SessionStart(rw, req)
 	defer sess.SessionRelease(rw)
-	//index, _ := views_index_html()
-	//t, err := template.New("index").Parse(string(index)) //解析模板文件
-	t, err := template.ParseFiles("web/views/index.html") //解析模板文件
+	index, _ := views_index_html()
+	t, err := template.New("index").Parse(string(index)) //解析模板文件
+	//t, err := template.ParseFiles("web/views/index.html") //解析模板文件
 	if err != nil {
 		logs.Log.Error("%v", err)
 	}
@@ -43,36 +47,28 @@ func IndexHandle (rw http.ResponseWriter, req *http.Request) {
 	data := map[string]interface{}{
 		"title":   config.FullName,
 		"logo":    config.IconPng,
-		"version": config.VERSION,
-		"author":  config.AUTHOR,
-		"mode": map[string]int{
-			"offline": status.OFFLINE,
-			"server":  status.SERVER,
-			"client":  status.CLIENT,
-			"unset":   status.UNSET,
-			"curr":    app.LogicApp.GetAppConf("mode").(int),
-		},
-		"status": map[string]int{
-			"stopped": status.STOPPED,
-			"stop":    status.STOP,
-			"run":     status.RUN,
-			"pause":   status.PAUSE,
-		},
-		"port": app.LogicApp.GetAppConf("port").(int),
-		"ip":   app.LogicApp.GetAppConf("master").(string),
 	}
 	t.Execute(rw, data) //执行模板的merger操作
 }
 
 func LoginHandle (rw http.ResponseWriter, req *http.Request) {
 	body, _ := ioutil.ReadAll(req.Body)
-	logs.Log.Informational (string(body))
-	
-	user.GAllUsers.NewUser("ok")
-	rw.Write([]byte("ok"))
+	var muser UserReqInfo
+	err := json.Unmarshal(body, &muser)
+	if nil != err {
+		logs.Log.Warning("user:%s login error", muser.name)
+		return
+	}
+
+	if user.GAllUsers.ValidUser(muser.name) {
+		user.GAllUsers.NewUser(muser.name)
+		rw.Write([]byte("login"))
+		logs.Log.Informational("user:%s login success", muser.name)
+	}
 }
 
 func SpiderHandle (rw http.ResponseWriter, req *http.Request) {
 	body, _ := ioutil.ReadAll(req.Body)
 	logs.Log.Informational (string(body))
 }
+

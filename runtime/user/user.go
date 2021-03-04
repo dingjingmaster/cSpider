@@ -28,6 +28,7 @@ func newUser () *UserSession {
 	}
 }
 
+// 新登录的用户
 func (self *UserSession) NewUser (userName string) {
 	self.Lock()
 	defer self.Unlock()
@@ -35,4 +36,9 @@ func (self *UserSession) NewUser (userName string) {
 	userInfo := UserInfo {time.Now().Unix()}
 
 	self.allUsers[userName] = &userInfo
+}
+
+// 验证用户是否合法,先判断是否已登录，如果没有登录则查找此用户是否注册
+func (self *UserSession) ValidUser (userName string) bool {
+	return true
 }
