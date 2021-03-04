@@ -4,8 +4,11 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"os/signal"
 	"runtime"
 	"spider/app"
+	"spider/app/spider"
+	"spider/runtime/status"
 	"strconv"
 	"strings"
 	"syscall"
@@ -13,7 +16,6 @@ import (
 	"spider/common/gc"
 	"spider/config"
 	"spider/runtime/cache"
-	"spider/runtime/status"
 )
 
 var (
@@ -58,22 +60,30 @@ func SignalProcess () bool {
 	return false
 }
 
-func DefaultRun () {
+func Run () {
 	if SignalProcess () {
 		fmt.Printf("%s is running\n", config.FullName)
 		return
 	}
 
+	// 输出信息
 	fmt.Printf("%v\n", config.FullName)
 
-	FlagInit()
+	// 命令行参数初始化
+	CommandLine()
 
-	flag.Parse()
-	writeFlag()
-	run()
+	// 启动所有 spider
+	RunSpider()
+
+	// 开始运行
+	ctrl := make(chan os.Signal, 1)
+	signal.Notify(ctrl, os.Interrupt, os.Kill)
+	//go web.Run()
+	<-ctrl
 }
 
-func FlagInit() {
+// 解析、初始化命令行参数
+func CommandLine () {
 	port = flag.Int(
 		"port",
 		cache.Task.Port,
@@ -151,10 +161,11 @@ func FlagInit() {
 
 	config.RunType = flag.String("runType", "daemon", "选择运行模式：后台运行(daemon)，控制台运行(console)")
 	config.RunMode = flag.String("mode", "offline", "运行模式：单机(offline), 服务端(service), 客户端(client)")
-}
 
-func writeFlag() {
-	// 运行模式，集群还是单机
+	// 解析命令行参数
+	flag.Parse()
+
+	// 更新命令行参数
 	switch *config.RunMode {
 	case "standalone":
 		cache.Task.Mode = status.OFFLINE
@@ -186,4 +197,35 @@ func writeFlag() {
 	cache.Task.DockerCap = *dockerflag
 	cache.Task.SuccessInherit = *successInheritflag
 	cache.Task.FailureInherit = *failureInheritflag
+}
+
+// FIXME:// 此处需要根据命令行进行配置
+// 启动 spider
+func RunSpider() {
+	app.LogicApp.Init()
+
+	// 初始化爬虫参数
+	app.LogicApp.SetAppConf("ThreadNum", 20)
+	app.LogicApp.SetAppConf("Pausetime", int64(200))
+	app.LogicApp.SetAppConf("ProxyMinute", int64(0))
+	app.LogicApp.SetAppConf("OutType", "csv")
+	app.LogicApp.SetAppConf("DockerCap", 0)
+	app.LogicApp.SetAppConf("Limit", int64(0))
+	app.LogicApp.SetAppConf("Keyins", "")
+	app.LogicApp.SetAppConf("SuccessInherit", true)					// 保存成功记录否
+	app.LogicApp.SetAppConf("FailureInherit", true)					// 保存失败记录否
+
+	// 获取所有爬虫
+	GetAllSpider()
+
+	go app.LogicApp.Run()
+}
+
+// 扫描爬虫
+func GetAllSpider () {
+	spiders := []*spider.Spider{}
+	for _, sp := range app.LogicApp.GetSpiderLib() {
+		spiders = append(spiders, sp.Copy())
+	}
+	app.LogicApp.SpiderPrepare(spiders)
 }

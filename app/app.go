@@ -24,38 +24,38 @@ import (
 
 type (
 	App interface {
-		SetLog(io.Writer) App                                         // 设置全局log实时显示终端
-		LogGoOn() App                                                 // 继续log打印
-		LogRest() App                                                 // 暂停log打印
-		Init(mode int, port int, master string, w ...io.Writer) App   // 使用App前必须进行先Init初始化，SetLog()除外
-		ReInit(mode int, port int, master string, w ...io.Writer) App // 切换运行模式并重设log打印目标
-		GetAppConf(k ...string) interface{}                           // 获取全局参数
-		SetAppConf(k string, v interface{}) App                       // 设置全局参数（client模式下不调用该方法）
-		SpiderPrepare(original []*spider.Spider) App                  // 须在设置全局运行参数后Run()前调用（client模式下不调用该方法）
-		Run()                                                         // 阻塞式运行直至任务完成（须在所有应当配置项配置完成后调用）
-		Stop()                                                        // Offline 模式下中途终止任务（对外为阻塞式运行直至当前任务终止）
-		IsRunning() bool                                              // 检查任务是否正在运行
-		IsPause() bool                                                // 检查任务是否处于暂停状态
-		IsStopped() bool                                              // 检查任务是否已经终止
-		PauseRecover()                                                // Offline 模式下暂停\恢复任务
-		Status() int                                                  // 返回当前状态
-		GetSpiderLib() []*spider.Spider                               // 获取全部蜘蛛种类
-		GetSpiderByName(string) *spider.Spider                        // 通过名字获取某蜘蛛
-		GetSpiderQueue() crawler.SpiderQueue                          // 获取蜘蛛队列接口实例
-		GetOutputLib() []string                                       // 获取全部输出方式
-		GetTaskJar() *distribute.TaskJar                              // 返回任务库
-		distribute.Distributer                                        // 实现分布式接口
+		SetLog(io.Writer) App                                         	// 设置全局log实时显示终端
+		LogGoOn() App                                                 	// 继续log打印
+		LogRest() App                                                 	// 暂停log打印
+		Init(w ...io.Writer) App   										// 使用App前必须进行先Init初始化，SetLog()除外
+		ReInit(mode int, port int, master string, w ...io.Writer) App 	// 切换运行模式并重设log打印目标
+		GetAppConf(k ...string) interface{}                           	// 获取全局参数
+		SetAppConf(k string, v interface{}) App                       	// 设置全局参数（client模式下不调用该方法）
+		SpiderPrepare(original []*spider.Spider) App                  	// 须在设置全局运行参数后Run()前调用（client模式下不调用该方法）
+		Run()                                                         	// 阻塞式运行直至任务完成（须在所有应当配置项配置完成后调用）
+		Stop()                                                        	// Offline 模式下中途终止任务（对外为阻塞式运行直至当前任务终止）
+		IsRunning() bool                                              	// 检查任务是否正在运行
+		IsPause() bool                                                	// 检查任务是否处于暂停状态
+		IsStopped() bool                                              	// 检查任务是否已经终止
+		PauseRecover()                                                	// Offline 模式下暂停\恢复任务
+		Status() int                                                  	// 返回当前状态
+		GetSpiderLib() []*spider.Spider                               	// 获取全部蜘蛛种类
+		GetSpiderByName(string) *spider.Spider                        	// 通过名字获取某蜘蛛
+		GetSpiderQueue() crawler.SpiderQueue                          	// 获取蜘蛛队列接口实例
+		GetOutputLib() []string                                       	// 获取全部输出方式
+		GetTaskJar() *distribute.TaskJar                              	// 返回任务库
+		distribute.Distributer                                        	// 实现分布式接口
 	}
 	Logic struct {
-		*cache.AppConf                      // 全局配置
-		*spider.SpiderSpecies               // 全部蜘蛛种类
-		crawler.SpiderQueue                 // 当前任务的蜘蛛队列
-		*distribute.TaskJar                 // 服务器与客户端间传递任务的存储库
-		crawler.CrawlerPool                 // 爬行回收池
-		teleport.Teleport                   // socket长连接双工通信接口，json数据传输
-		sum                   [2]uint64     // 执行计数
-		takeTime              time.Duration // 执行计时
-		status                int           // 运行状态
+		*cache.AppConf                      							// 全局配置
+		*spider.SpiderSpecies               							// 全部蜘蛛种类
+		crawler.SpiderQueue                 							// 当前任务的蜘蛛队列
+		*distribute.TaskJar                 							// 服务器与客户端间传递任务的存储库
+		crawler.CrawlerPool                 							// 爬行回收池
+		teleport.Teleport                   							// socket长连接双工通信接口，json数据传输
+		sum                   [2]uint64     							// 执行计数
+		takeTime              time.Duration 							// 执行计时
+		status                int           							// 运行状态
 		finish                chan bool
 		finishOnce            sync.Once
 		canSocketLog          bool
@@ -157,14 +157,18 @@ func (self *Logic) SetAppConf(k string, v interface{}) App {
 }
 
 // 使用App前必须先进行Init初始化（SetLog()除外）
-func (self *Logic) Init(mode int, port int, master string, w ...io.Writer) App {
+func (self *Logic) Init( w ...io.Writer) App {
 	self.canSocketLog = false
 	if len(w) > 0 {
 		self.SetLog(w[0])
 	}
 	self.LogGoOn()
 
-	self.AppConf.Mode, self.AppConf.Port, self.AppConf.Master = mode, port, master
+	if status.UNSET == self.AppConf.Mode {
+		self.AppConf.Mode = status.OFFLINE
+	}
+
+	//self.AppConf.Mode, self.AppConf.Port, self.AppConf.Master = mode, port, master
 	self.Teleport = teleport.New()
 	self.TaskJar = distribute.NewTaskJar()
 	self.SpiderQueue = crawler.NewSpiderQueue()
@@ -214,7 +218,7 @@ func (self *Logic) ReInit(mode int, port int, master string, w ...io.Writer) App
 		return self
 	}
 	// 重新开启
-	self = newLogic().Init(mode, port, master, w...).(*Logic)
+	self = newLogic().Init(w...).(*Logic)
 	return self
 }
 

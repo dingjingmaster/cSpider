@@ -167,7 +167,7 @@ func init() {
 		var master = util.Atoa(req["ip"]) //服务器(主节点)地址，不含端口
 		currMode := app.LogicApp.GetAppConf("mode").(int)
 		if currMode == status.UNSET {
-			app.LogicApp.Init(mode, port, master, Lsc) // 运行模式初始化，设置log输出目标
+			//app.LogicApp.Init(mode, port, master, Lsc) // 运行模式初始化，设置log输出目标
 		} else {
 			app.LogicApp = app.LogicApp.ReInit(mode, port, master) // 切换运行模式
 		}
