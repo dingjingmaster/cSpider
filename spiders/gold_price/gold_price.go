@@ -2,9 +2,11 @@ package gold_price
 
 import (
 	"encoding/json"
+	"fmt"
 	"spider/app/downloader/request"
 	. "spider/app/spider"
 	_ "spider/common/goquery"
+	"spider/common/timeUtils"
 	"spider/logs"
 )
 
@@ -38,8 +40,8 @@ var GoldPrice = &Spider {
 	RuleTree: &RuleTree{
 		Root: func(ctx *Context) {
 			ctx.AddQueue(&request.Request{
-				Url:"https://data-asg.goldprice.org/dbXRates/USD,CNY",
-				Rule: "获取中国和美国黄金价格",
+				Url:"https://data-asg.goldprice.org/dbXRates/CNY",
+				Rule: "获取标准黄金价格",
 				Temp: map[string]interface {} {
 					"target":"first",
 				},
@@ -47,12 +49,41 @@ var GoldPrice = &Spider {
 		},
 
 		Trunk: map[string]*Rule{
-			"获取中国和美国黄金价格": {
+			"获取标准黄金价格": {
+				ItemFields: []string {
+					"id",
+					"gold-1",
+					"gold-2",
+					"gold-h",
+					"gold-l",
+					"gold-v",
+					"gold-a",
+					"gold-t",
+				},
 				ParseFunc: func(ctx *Context) {
 					jsonStr := ctx.GetText()
 					gs := &GoldPriceStruct{}
 					json.Unmarshal([]byte(jsonStr), &gs)
-					logs.Log.Informational("country:%s, price:%f, date:%s", gs.Items[0].Curr, gs.Items[0].ChgXau, gs.Date)
+					gold1 := gs.Items[0].XauPrice
+					gold2 := gs.Items[0].XauPrice
+					goldh := gs.Items[0].XauPrice
+					goldl := gs.Items[0].XauPrice
+					goldv := gs.Items[0].ChgXau
+					golda := 0
+					goldt := timeUtils.GetTimeStamp()
+					id := fmt.Sprintf("%d-%.2f-%.2f-%.2f-%.2f-%.2f-%d", goldt, gold1, gold2, goldh, goldl, goldv, golda)
+
+					ctx.Output (map[int]interface{} {
+						0: id,
+						1: gold1,
+						2: gold2,
+						3: goldh,
+						4: goldl,
+						5: goldv,
+						6: golda,
+						7: goldt,
+					})
+					logs.Log.Informational("%v", id)
 				},
 			},
 		},
