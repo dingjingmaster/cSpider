@@ -191,7 +191,7 @@ func (self *Context) JsAddQueue(jreq map[string]interface{}) *Context {
 func (self *Context) Output(item interface{}, ruleName ...string) {
 	_ruleName, rule, found := self.getRule(ruleName...)
 	if !found {
-		logs.Log.Error("蜘蛛 %s 调用Output()时，指定的规则名不存在！", self.spider.GetName())
+		logs.Log.Error("spider: %s Output() error! rule name not exists！", self.spider.GetName())
 		return
 	}
 	var _item map[string]interface{}
@@ -647,10 +647,10 @@ func (self *Context) initText() {
 					self.Response.Body.Close()
 					return
 				} else {
-					logs.Log.Warning(" *     [convert][%v]: %v (ignore transcoding)\n", self.GetUrl(), err)
+					logs.Log.Warning(" *     [convert][%v]: %v (ignore transcoding)", self.GetUrl(), err)
 				}
 			} else {
-				logs.Log.Warning(" *     [convert][%v]: %v (ignore transcoding)\n", self.GetUrl(), err)
+				logs.Log.Warning(" *     [convert][%v]: %v (ignore transcoding)", self.GetUrl(), err)
 			}
 		}
 	}

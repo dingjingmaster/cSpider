@@ -32,11 +32,11 @@ type GoldPriceStruct struct {
 }
 
 var GoldPrice = &Spider {
-	Name: "金价获取",
-	Description: "金价获取",
-	Pausetime: 300,
-	Limit:        LIMIT,
-	EnableCookie: false,
+	Name: 			"金价获取",
+	Description: 	"金价获取",
+	Pausetime: 		300,
+	Limit:        	LIMIT,
+	EnableCookie: 	false,
 	RuleTree: &RuleTree{
 		Root: func(ctx *Context) {
 			ctx.AddQueue(&request.Request{
@@ -51,7 +51,7 @@ var GoldPrice = &Spider {
 		Trunk: map[string]*Rule{
 			"获取标准黄金价格": {
 				ItemFields: []string {
-					"id",
+					"gid",
 					"gold-1",
 					"gold-2",
 					"gold-h",

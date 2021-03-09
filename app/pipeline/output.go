@@ -2,7 +2,6 @@ package pipeline
 
 import (
 	"sort"
-
 	"spider/app/pipeline/collector"
 	"spider/common/kafka"
 	"spider/common/mgo"

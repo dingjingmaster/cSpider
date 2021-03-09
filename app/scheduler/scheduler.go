@@ -20,7 +20,7 @@ type scheduler struct {
 }
 
 // 定义全局调度
-var sdl = &scheduler{
+var sdl = &scheduler {
 	status: status.RUN,
 	count:  make(chan bool, cache.Task.ThreadNum),
 	proxy:  proxy.New(),
@@ -35,14 +35,14 @@ func Init() {
 		if sdl.proxy.Count() > 0 {
 			sdl.useProxy = true
 			sdl.proxy.UpdateTicker(cache.Task.ProxyMinute)
-			logs.Log.Informational(" *     使用代理IP，代理IP更换频率为 %v 分钟", cache.Task.ProxyMinute)
+			logs.Log.Informational("使用代理IP，代理IP更换频率为 %v 分钟", cache.Task.ProxyMinute)
 		} else {
 			sdl.useProxy = false
-			logs.Log.Informational(" *     在线代理IP列表为空，无法使用代理IP")
+			logs.Log.Informational("在线代理IP列表为空，无法使用代理IP")
 		}
 	} else {
 		sdl.useProxy = false
-		logs.Log.Informational(" *     不使用代理IP\n")
+		logs.Log.Informational("不使用代理IP")
 	}
 
 	sdl.status = status.RUN
@@ -76,7 +76,6 @@ func PauseRecover() {
 
 // 终止任务
 func Stop() {
-	// println("scheduler^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
 	sdl.Lock()
 	defer sdl.Unlock()
 	sdl.status = status.STOP
@@ -89,7 +88,6 @@ func Stop() {
 	// }
 	close(sdl.count)
 	sdl.matrices = []*Matrix{}
-	// println("scheduler$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 }
 
 // 每个spider实例分配到的平均资源量

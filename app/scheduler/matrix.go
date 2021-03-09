@@ -169,7 +169,7 @@ func (self *Matrix) DoHistory(req *request.Request, ok bool) bool {
 	if _, ok := self.failures[req.Unique()]; !ok {
 		// 首次失败时，在任务队列末尾重新执行一次
 		self.failures[req.Unique()] = req
-		logs.Log.Informational(" *     + 失败请求: [%v]\n", req.GetUrl())
+		logs.Log.Informational("失败请求: [%v]", req.GetUrl())
 		return true
 	}
 	// 失败两次后，加入历史失败记录
@@ -202,7 +202,7 @@ func (self *Matrix) CanStop() bool {
 			}
 			self.failures[reqUnique] = nil
 			goon = true
-			logs.Log.Informational(" *     - 失败请求: [%v]\n", req.GetUrl())
+			logs.Log.Informational("失败请求: [%v]", req.GetUrl())
 			self.Push(req)
 		}
 		if goon {
@@ -269,7 +269,7 @@ func (self *Matrix) setFailures(reqs map[string]*request.Request) {
 	defer self.failureLock.Unlock()
 	for key, req := range reqs {
 		self.failures[key] = req
-		logs.Log.Informational(" *     + 失败请求: [%v]\n", req.GetUrl())
+		logs.Log.Informational("失败请求: [%v]", req.GetUrl())
 	}
 }
 

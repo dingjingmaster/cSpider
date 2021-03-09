@@ -36,15 +36,18 @@ func init() {
 	DataOutput["mysql"] = func(self *Collector) error {
 		_, err := mysql.DB()
 		if err != nil {
-			return fmt.Errorf("Mysql数据库链接失败: %v", err)
+			logs.Log.Error("Connect to mysql error: %v",err)
+			return fmt.Errorf("Connect to mysql error: %v", err)
 		}
 		var (
 			mysqls    = make(map[string]*mysql.MyTable)
 			namespace = util.FileNameReplace(self.namespace())
 		)
+		
 		for _, datacell := range self.dataDocker {
 			subNamespace := util.FileNameReplace(self.subNamespace(datacell))
 			tName := joinNamespaces(namespace, subNamespace)
+			logs.Log.Debug("Table name:%s", tName)
 			table, ok := mysqls[tName]
 			if !ok {
 				table, ok = getMysqlTable(tName)

@@ -25,6 +25,7 @@ type MyTable struct {
 	size             int // 内容大小的近似值
 }
 
+
 var (
 	err                error
 	db                 *sql.DB
@@ -39,16 +40,17 @@ func DB() (*sql.DB, error) {
 
 func Refresh() {
 	once.Do(func() {
+		logs.Log.Debug("mysql" + config.MYSQL_CONN_STR+"/"+config.DB_NAME+"?charset=utf8")
 		db, err = sql.Open("mysql", config.MYSQL_CONN_STR+"/"+config.DB_NAME+"?charset=utf8")
 		if err != nil {
-			logs.Log.Error("Mysql：%v\n", err)
+			logs.Log.Error("Mysql：%v", err)
 			return
 		}
 		db.SetMaxOpenConns(config.MYSQL_CONN_CAP)
 		db.SetMaxIdleConns(config.MYSQL_CONN_CAP)
 	})
 	if err = db.Ping(); err != nil {
-		logs.Log.Error("Mysql：%v\n", err)
+		logs.Log.Error("Mysql：%v", err)
 	}
 }
 
@@ -67,6 +69,7 @@ func (m *MyTable) Clone() *MyTable {
 //设置表名
 func (self *MyTable) SetTableName(name string) *MyTable {
 	self.tableName = wrapSqlKey(name)
+	logs.Log.Debug("Set table name:%s", self.tableName)
 	return self
 }
 
@@ -75,7 +78,7 @@ func (self *MyTable) AddColumn(names ...string) *MyTable {
 	for _, name := range names {
 		name = strings.Trim(name, " ")
 		idx := strings.Index(name, " ")
-		self.columnNames = append(self.columnNames, [2]string{wrapSqlKey(name[:idx]), name[idx+1:]})
+		self.columnNames = append(self.columnNames, [2]string{wrapSqlKey(name[:idx]), name[idx + 1:]})
 	}
 	return self
 }
@@ -99,7 +102,9 @@ func (self *MyTable) Create() error {
 	for _, title := range self.columnNames {
 		self.sqlCode += title[0] + ` ` + title[1] + `,`
 	}
-	self.sqlCode = self.sqlCode[:len(self.sqlCode)-1] + `) ENGINE=MyISAM DEFAULT CHARSET=utf8;`
+	self.sqlCode = self.sqlCode[:len(self.sqlCode)-1] + `) DEFAULT CHARSET=utf8;`
+
+	logs.Log.Debug("Sql code:%s", self.sqlCode)
 
 	maxConnChan <- true
 	defer func() {
@@ -121,6 +126,8 @@ func (self *MyTable) Truncate() error {
 		<-maxConnChan
 	}()
 	_, err := db.Exec(`TRUNCATE TABLE ` + self.tableName)
+
+	logs.Log.Debug("Sql code: TRUNCATE TABLE %s;", self.tableName)
 	return err
 }
 
@@ -177,6 +184,7 @@ func (self *MyTable) FlushInsert() error {
 	blank := ",(" + strings.Repeat(",?", colCount)[1:] + ")"
 	self.sqlCode += strings.Repeat(blank, self.rowsCount)[1:] + `;`
 
+
 	defer func() {
 		// 清空临时数据
 		self.args = []interface{}{}
@@ -190,9 +198,7 @@ func (self *MyTable) FlushInsert() error {
 		<-maxConnChan
 	}()
 
-	// debug
-	// println("FlushInsert():", self.sqlCode)
-
+	logs.Log.Debug("Sql code: %s", self.sqlCode)
 	_, err := db.Exec(self.sqlCode, self.args...)
 	return err
 }
@@ -208,6 +214,7 @@ func (self *MyTable) SelectAll() (*sql.Rows, error) {
 	defer func() {
 		<-maxConnChan
 	}()
+	logs.Log.Debug("Sql code: %s", self.sqlCode)
 	return db.Query(self.sqlCode)
 }
 

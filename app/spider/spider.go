@@ -22,16 +22,16 @@ type (
 	// 蜘蛛规则
 	Spider struct {
 		// 以下字段由用户定义
-		Name            string                                                     // 用户界面显示的名称（应保证唯一性）
-		Description     string                                                     // 用户界面显示的描述
-		Pausetime       int64                                                      // 随机暂停区间(50%~200%)，若规则中直接定义，则不被界面传参覆盖
-		Limit           int64                                                      // 默认限制请求数，0为不限；若规则中定义为LIMIT，则采用规则的自定义限制方案
-		Keyin           string                                                     // 自定义输入的配置信息，使用前须在规则中设置初始值为KEYIN
-		EnableCookie    bool                                                       // 所有请求是否使用cookie记录
-		NotDefaultField bool                                                       // 是否禁止输出结果中的默认字段 Url/ParentUrl/DownloadTime
-		Namespace       func(self *Spider) string                                  // 命名空间，用于输出文件、路径的命名
-		SubNamespace    func(self *Spider, dataCell map[string]interface{}) string // 次级命名，用于输出文件、路径的命名，可依赖具体数据内容
-		RuleTree        *RuleTree                                                  // 定义具体的采集规则树
+		Name            string                                                     	// 用户界面显示的名称（应保证唯一性）
+		Description     string                                                     	// 用户界面显示的描述
+		Pausetime       int64                                                      	// 随机暂停区间(50%~200%)，若规则中直接定义，则不被界面传参覆盖
+		Limit           int64                                                      	// 默认限制请求数，0为不限；若规则中定义为LIMIT，则采用规则的自定义限制方案
+		Keyin           string                                                     	// 自定义输入的配置信息，使用前须在规则中设置初始值为KEYIN
+		EnableCookie    bool                                                       	// 所有请求是否使用cookie记录
+		NotDefaultField bool                                                       	// 是否禁止输出结果中的默认字段 Url/ParentUrl/DownloadTime
+		Namespace       func(self *Spider) string                                  	// 命名空间，用于输出文件、路径的命名
+		SubNamespace    func(self *Spider, dataCell map[string]interface{}) string 	// 次级命名，用于输出文件、路径的命名，可依赖具体数据内容
+		RuleTree        *RuleTree                                                  	// 定义具体的采集规则树
 
 		// 以下字段系统自动赋值
 		id        int               // 自动分配的SpiderQueue中的索引
@@ -282,7 +282,7 @@ func (self *Spider) TryFlushFailure() {
 func (self *Spider) Start() {
 	defer func() {
 		if p := recover(); p != nil {
-			logs.Log.Error(" *     Panic  [root]: %v\n", p)
+			logs.Log.Error("Panic  [root]: %v", p)
 		}
 		self.lock.Lock()
 		self.status = status.RUN

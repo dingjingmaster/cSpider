@@ -31,6 +31,11 @@ var (
 	failureInheritflag 	*bool
 )
 
+func init() {
+	// 标记当前init()已执行完毕
+	defer cache.ExecInit(0)
+}
+
 
 func main () {
 	if SignalProcess () {

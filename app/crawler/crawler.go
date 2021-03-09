@@ -98,7 +98,7 @@ func (self *crawler) run() {
 			defer func() {
 				self.FreeOne()
 			}()
-			logs.Log.Debug(" *     Start: %v", req.GetUrl())
+			logs.Log.Debug("Start: %v", req.GetUrl())
 			self.Process(req)
 		}()
 
@@ -166,6 +166,7 @@ func (self *crawler) Process(req *request.Request) {
 	}
 	// 该条请求文本结果存入pipeline
 	for _, item := range ctx.PullItems() {
+		logs.Log.Debug("Save data to pipeline:%v", item)
 		if self.Pipeline.CollectData(item) != nil {
 			break
 		}
@@ -178,7 +179,7 @@ func (self *crawler) Process(req *request.Request) {
 	cache.PageSuccCount()
 
 	// 提示抓取成功
-	logs.Log.Informational(" *     Success: %v\n", downUrl)
+	logs.Log.Informational("Success: %v", downUrl)
 
 	// 释放ctx准备复用
 	spider.PutContext(ctx)

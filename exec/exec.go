@@ -1,6 +1,8 @@
 package exec
 
 import (
+	"os"
+	"os/signal"
 	"runtime"
 	"spider/app"
 	"spider/app/spider"
@@ -24,27 +26,16 @@ func Run () {
 	//}
 
 	// 开始运行
-	//ctrl := make(chan os.Signal, 1)
-	//signal.Notify(ctrl, os.Interrupt, os.Kill)
+	ctrl := make(chan os.Signal, 1)
+	signal.Notify(ctrl, os.Interrupt, os.Kill)
 	//go web.Run()
-	//<-ctrl
+	<-ctrl
 }
 
 // FIXME:// 此处需要根据命令行进行配置
 // 启动 spider
 func RunSpider() {
 	app.LogicApp.Init()
-
-	// 初始化爬虫参数
-	app.LogicApp.SetAppConf("ThreadNum", 20)
-	app.LogicApp.SetAppConf("Pausetime", int64(200))
-	app.LogicApp.SetAppConf("ProxyMinute", int64(0))
-	app.LogicApp.SetAppConf("OutType", "csv")
-	app.LogicApp.SetAppConf("DockerCap", 0)
-	app.LogicApp.SetAppConf("Limit", int64(0))
-	app.LogicApp.SetAppConf("Keyins", "")
-	app.LogicApp.SetAppConf("SuccessInherit", true)					// 保存成功记录否
-	app.LogicApp.SetAppConf("FailureInherit", true)					// 保存失败记录否
 
 	GetAllSpider()
 

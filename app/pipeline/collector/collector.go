@@ -14,16 +14,16 @@ import (
 
 // 结果收集与输出
 type Collector struct {
-	*spider.Spider                    //绑定的采集规则
-	DataChan       chan data.DataCell //文本数据收集通道
-	FileChan       chan data.FileCell //文件收集通道
-	dataDocker     []data.DataCell    //分批输出结果缓存
-	outType        string             //输出方式
-	// size     [2]uint64 //数据总输出流量统计[文本，文件]，文本暂时未统计
-	dataBatch   uint64 //当前文本输出批次
-	fileBatch   uint64 //当前文件输出批次
+	*spider.Spider                    		// 绑定的采集规则
+	DataChan       chan data.DataCell 		// 文本数据收集通道
+	FileChan       chan data.FileCell 		// 文件收集通道
+	dataDocker     []data.DataCell    		// 分批输出结果缓存
+	outType        string             		// 输出方式
+	// size     [2]uint64 					// 数据总输出流量统计[文本，文件]，文本暂时未统计
+	dataBatch   uint64 						// 当前文本输出批次
+	fileBatch   uint64 						// 当前文件输出批次
 	wait        sync.WaitGroup
-	sum         [4]uint64 //收集的数据总数[上次输出后文本总数，本次输出后文本总数，上次输出后文件总数，本次输出后文件总数]，非并发安全
+	sum         [4]uint64 					//收集的数据总数[上次输出后文本总数，本次输出后文本总数，上次输出后文件总数，本次输出后文件总数]，非并发安全
 	dataSumLock sync.RWMutex
 	fileSumLock sync.RWMutex
 }

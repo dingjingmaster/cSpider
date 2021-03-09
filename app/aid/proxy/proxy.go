@@ -86,7 +86,7 @@ func (self *Proxy) Update() *Proxy {
 		self.all[proxy] = false
 	}
 
-	log.Printf(" *     读取代理IP: %v 条\n", len(self.all))
+	log.Printf("读取代理IP: %v 条", len(self.all))
 
 	self.findOnline()
 
@@ -95,7 +95,7 @@ func (self *Proxy) Update() *Proxy {
 
 // 筛选在线的代理IP
 func (self *Proxy) findOnline() *Proxy {
-	log.Printf(" *     正在筛选在线的代理IP……")
+	log.Printf("正在筛选在线的代理IP……")
 	self.online = 0
 	for proxy := range self.all {
 		self.threadPool <- true
@@ -114,7 +114,7 @@ func (self *Proxy) findOnline() *Proxy {
 		time.Sleep(0.2e9)
 	}
 	self.online = atomic.LoadInt32(&self.online)
-	log.Printf(" *     在线代理IP筛选完成，共计：%v 个\n", self.online)
+	log.Printf("在线代理IP筛选完成，共计：%v 个", self.online)
 
 	return self
 }
@@ -136,7 +136,7 @@ func (self *Proxy) GetOne(u string) (curProxy string) {
 	}
 	u2, _ := url.Parse(u)
 	if u2.Host == "" {
-		logs.Log.Informational(" *     [%v]设置代理IP失败，目标url不正确\n", u)
+		logs.Log.Informational("[%v]设置代理IP失败，目标url不正确", u)
 		return
 	}
 	var key = u2.Host
@@ -174,12 +174,12 @@ func (self *Proxy) GetOne(u string) (curProxy string) {
 		}
 	}
 	if !ok {
-		logs.Log.Informational(" *     [%v]设置代理IP失败，没有可用的代理IP\n", key)
+		logs.Log.Informational("[%v]设置代理IP失败，没有可用的代理IP", key)
 		return
 	}
 	curProxy = proxyForHost.proxys[proxyForHost.curIndex]
 	if proxyForHost.isEcho {
-		logs.Log.Informational(" *     设置代理IP为 [%v](%v)\n",
+		logs.Log.Informational("设置代理IP为 [%v](%v)",
 			curProxy,
 			proxyForHost.timedelay[proxyForHost.curIndex],
 		)
@@ -190,7 +190,7 @@ func (self *Proxy) GetOne(u string) (curProxy string) {
 
 // 测试并排序
 func (self *Proxy) testAndSort(key string, testHost string) (*ProxyForHost, bool) {
-	logs.Log.Informational(" *     [%v]正在测试与排序代理IP……", key)
+	logs.Log.Informational("[%v]正在测试与排序代理IP……", key)
 	proxyForHost := self.usable[key]
 	proxyForHost.proxys = []string{}
 	proxyForHost.timedelay = []time.Duration{}
@@ -216,10 +216,10 @@ func (self *Proxy) testAndSort(key string, testHost string) (*ProxyForHost, bool
 	}
 	if proxyForHost.Len() > 0 {
 		sort.Sort(proxyForHost)
-		logs.Log.Informational(" *     [%v]测试与排序代理IP完成，可用：%v 个\n", key, proxyForHost.Len())
+		logs.Log.Informational("[%v]测试与排序代理IP完成，可用：%v 个", key, proxyForHost.Len())
 		return proxyForHost, true
 	}
-	logs.Log.Informational(" *     [%v]测试与排序代理IP完成，没有可用的代理IP\n", key)
+	logs.Log.Informational("[%v]测试与排序代理IP完成，没有可用的代理IP", key)
 	return proxyForHost, false
 }
 

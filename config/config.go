@@ -34,7 +34,7 @@ const (
 // 来自配置文件的配置项。
 var (
 	CRAWLS_CAP int = setting.DefaultInt("crawlcap", crawlcap) // 蜘蛛池最大容量
-	// DATA_CHAN_CAP            int    = setting.DefaultInt("datachancap", datachancap)                               // 收集器容量
+	// DATA_CHAN_CAP            int    = setting.DefaultInt("datachancap", datachancap)                         // 收集器容量
 	PHANTOMJS                string = setting.String("phantomjs")                                          // Surfer-Phantom下载器：phantomjs程序路径
 	PROXY                    string = setting.String("proxylib")                                           // 代理IP文件路径
 	SPIDER_DIR               string = setting.String("spiderdir")                                          // 动态规则目录
@@ -50,7 +50,7 @@ var (
 	BeanstalkdHost           string = setting.DefaultString("beanstalkd::host", beanstalkHost)             // Beanstalkd指定主机地址
 	BeanstalkdTube           string = setting.DefaultString("beanstalkd::tube", beanstalkTube)             // Beanstalkd指定主机地址
 
-	KAFKA_BORKERS string = setting.DefaultString("kafka::brokers", kafkabrokers) //kafka brokers
+	KAFKA_BORKERS string = setting.DefaultString("kafka::brokers", kafkabrokers) 							// kafka brokers
 
 	LOG_CAP            int64 = setting.DefaultInt64("log::cap", logcap)          // 日志缓存的容量
 	LOG_LEVEL          int   = logLevel(setting.String("log::level"))            // 全局日志打印级别（亦是日志文件输出级别）

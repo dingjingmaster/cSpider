@@ -260,7 +260,7 @@ func (self *Logic) Run() {
 	// 确保开启报告
 	self.LogGoOn()
 	if self.AppConf.Mode != status.CLIENT && self.SpiderQueue.Len() == 0 {
-		logs.Log.Warning(" *     —— 亲，任务列表不能为空哦~")
+		logs.Log.Warning("任务列表不能为空~")
 		self.LogRest()
 		return
 	}
