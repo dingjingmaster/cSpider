@@ -11,6 +11,7 @@ use `spider`;
 -- 线上数据库
 # alter database `spider_online` default character set utf8;
 # use `spider_online`;
+-- truncate table `金价获取__0__获取标准黄金价格`;
 
 -- 黄金相关字段: 日期、开盘价格、收盘价格、最高、最低、涨跌幅、区域(中国、美国)
 CREATE TABLE IF NOT EXISTS `sp_gold` (
