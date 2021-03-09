@@ -9,7 +9,7 @@ cd "${workdir}"
 cat > "${release}" << EOF
 package common
 
-const  TAG      string = "spider-online"
+const  TAG      string = "spider_online"
 
 EOF
 
