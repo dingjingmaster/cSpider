@@ -8,8 +8,11 @@
 alter database `spider` default character set utf8;
 use `spider`;
 
--- 黄金相关字段: 日期、开盘价格、收盘价格、最高、最低、涨跌幅、区域(中国、美国)
+-- 线上数据库
+# alter database `spider_online` default character set utf8;
+# use `spider_online`;
 
+-- 黄金相关字段: 日期、开盘价格、收盘价格、最高、最低、涨跌幅、区域(中国、美国)
 CREATE TABLE IF NOT EXISTS `sp_gold` (
     `id` VARCHAR(320) NOT NULL              COMMENT '主键，时间-信息(gold)-区域()',
     `gold-1` float DEFAULT 0 NOT NULL       COMMENT '黄金开盘价格',

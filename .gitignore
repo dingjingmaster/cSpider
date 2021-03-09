@@ -1,6 +1,7 @@
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------
 views
+spider
 main
 .idea/
 spider_running/

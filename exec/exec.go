@@ -1,8 +1,6 @@
 package exec
 
 import (
-	"os"
-	"os/signal"
 	"runtime"
 	"spider/app"
 	"spider/app/spider"
@@ -26,10 +24,10 @@ func Run () {
 	//}
 
 	// 开始运行
-	ctrl := make(chan os.Signal, 1)
-	signal.Notify(ctrl, os.Interrupt, os.Kill)
-	//go web.Run()
-	<-ctrl
+	//ctrl := make(chan os.Signal, 1)
+	//signal.Notify(ctrl, os.Interrupt, os.Kill)
+	////go web.Run()
+	//<-ctrl
 }
 
 // FIXME:// 此处需要根据命令行进行配置

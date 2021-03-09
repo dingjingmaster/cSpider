@@ -1,6 +1,7 @@
 package config
 
 import (
+	"spider/common"
 	"strings"
 
 	"spider/logs/logs"
@@ -13,14 +14,13 @@ const (
 	AUTHOR   string = "DingJing"                                       		// 软件作者
 	NAME     string = "spider"                                 				// 软件名
 	FullName string = NAME + " " + VERSION + "（by " + AUTHOR + "）" 		// 软件全称
-	TAG      string = "spider"                                      		// 软件标识符
 	IconPng  string = ``
 	PidFile	 string = "/tmp/" + NAME + "_" + AUTHOR + "_" + VERSION			// 进程id存放位置
 )
 
 // 默认配置。
 const (
-	WorkRoot      string = TAG + "_running"               // 运行时的目录名称
+	WorkRoot      string = common.TAG + "_running"               // 运行时的目录名称
 	CONFIG        string = WorkRoot + "/config.ini"       // 配置文件路径
 	CacheDir      string = WorkRoot + "/cache"            // 缓存文件目录
 	LOG           string = WorkRoot + "/logs/spiders.log" // 日志文件路径

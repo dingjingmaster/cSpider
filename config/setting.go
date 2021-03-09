@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"strconv"
 
+	"spider/common"
 	"spider/common/config"
 	"spider/runtime/status"
 )
@@ -33,7 +34,7 @@ const (
 	spiderdir             string = WorkRoot + "/spiders"       						// 动态规则目录
 	fileoutdir            string = WorkRoot + "/file_out"      						// 文件（图片、HTML等）结果的输出目录
 	textoutdir            string = WorkRoot + "/text_out"      						// excel或csv输出方式下，文本结果的输出目录
-	dbname                string = TAG                         						// 数据库名称
+	dbname                string = common.TAG                         				// 数据库名称
 	mgoconnstring         string = "127.0.0.1:27017"           						// mongodb连接字符串
 	mgoconncap            int    = 1024                        						// mongodb连接池容量
 	mgoconngcsecond       int64  = 600                         						// mongodb连接池GC时间，单位秒
