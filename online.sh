@@ -18,7 +18,7 @@ go build
 cat > "${release}" << EOF
 package common
 
-const  TAG      string = "spider"
+const  TAG      string = "spider_debug"
 
 EOF
 
